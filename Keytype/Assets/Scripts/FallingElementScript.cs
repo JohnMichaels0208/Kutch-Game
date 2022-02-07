@@ -11,33 +11,22 @@ public class FallingElementScript : MonoBehaviour
     [SerializeField] private GameObject             textGameObject;
 
     private float                                   fallingSpeed = 2f;
-    private GameCharacter                           associatedGameCharacter;
+    public GameCharacter                           associatedGameCharacter;
 
-    private List<GameCharacter>                     gameCharacterList;
-
-    //explode event declaration
-    public delegate void FallingElementExplodeEventHandler(object sender, System.EventArgs e);
-    public event FallingElementExplodeEventHandler FallingElementExplodeEvent;
+    public delegate void FallingElementCollideEventHandler(object sender, System.EventArgs eventArgs);
+    public event FallingElementCollideEventHandler fallingElementCollideEvent;
 
     void Start()
     {
         explodeFX = transform.GetChild(0).gameObject;
         collisionFX = transform.GetChild(1).gameObject;
         gameManagerScript.pauseGameEvent += OnDisableFallingElements;
-        gameCharacterList = gameManagerScript.allGameCharacters;
         textMeshProUGUI = textGameObject.transform.GetComponent<TextMeshPro>();
-        associatedGameCharacter = gameCharacterList[Random.Range(0, gameCharacterList.Count)];
-        textMeshProUGUI.text = associatedGameCharacter.label.ToString(); 
+        textMeshProUGUI.text = associatedGameCharacter.label.ToString();
     }
 
     void Update()
     {
-        if (associatedGameCharacter.keyCode == gameManagerScript.currentKeycodeDetected)
-        {
-            OnFallingElementExplode();
-            Die(explodeFX);
-        }
-
         transform.Translate(Vector3.down * Time.deltaTime * fallingSpeed);
     }
 
@@ -45,8 +34,7 @@ public class FallingElementScript : MonoBehaviour
     {
         if (collision.transform.tag == "Death Zone")
         {
-            gameManagerScript.RemoveHealth(1);
-            Die(collisionFX);
+            Collide();
         }
     }
         
@@ -59,10 +47,19 @@ public class FallingElementScript : MonoBehaviour
     {
         TogglePauseFallingElements();
     }
-    private void Die(GameObject FX)
+
+    public void Explode()
     {
-        FX.SetActive(true);
-        FX.transform.parent = null;
+        explodeFX.SetActive(true);
+        explodeFX.transform.parent = null;
+        Destroy(gameObject);
+    }
+
+    private void Collide()
+    {
+        OnFallingElementCollide();
+        collisionFX.SetActive(true);
+        collisionFX.transform.parent = null;
         Destroy(gameObject);
     }
 
@@ -74,11 +71,11 @@ public class FallingElementScript : MonoBehaviour
         }
     }
 
-    protected virtual void OnFallingElementExplode()
+    protected virtual void OnFallingElementCollide()
     {
-        if (FallingElementExplodeEvent != null)
+        if (fallingElementCollideEvent != null)
         {
-            FallingElementExplodeEvent.Invoke(this, System.EventArgs.Empty);
+            fallingElementCollideEvent.Invoke(this, System.EventArgs.Empty);
         }
     }
 }

@@ -17,7 +17,7 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] private GameObject gameOverUI;
 
     private AudioSource audioSource;
-    
+
     // Reference to the object to spawn
     [SerializeField] private Transform fallingElement;
 
@@ -32,34 +32,6 @@ public class GameManagerScript : MonoBehaviour
     private int spawnAmtPerCountdown = 1;
     private bool countdownComplete;
 
-    //All game characters
-    private readonly GameCharacter gameCharacterA = new GameCharacter('A', KeyCode.A);
-    private readonly GameCharacter gameCharacterB = new GameCharacter('B', KeyCode.B);
-    private readonly GameCharacter gameCharacterC = new GameCharacter('C', KeyCode.C);
-    private readonly GameCharacter gameCharacterD = new GameCharacter('D', KeyCode.D);
-    private readonly GameCharacter gameCharacterE = new GameCharacter('E', KeyCode.E);
-    private readonly GameCharacter gameCharacterF = new GameCharacter('F', KeyCode.F);
-    private readonly GameCharacter gameCharacterG = new GameCharacter('G', KeyCode.G);
-    private readonly GameCharacter gameCharacterH = new GameCharacter('H', KeyCode.H);
-    private readonly GameCharacter gameCharacterI = new GameCharacter('I', KeyCode.I);
-    private readonly GameCharacter gameCharacterJ = new GameCharacter('J', KeyCode.J);
-    private readonly GameCharacter gameCharacterK = new GameCharacter('K', KeyCode.K);
-    private readonly GameCharacter gameCharacterL = new GameCharacter('L', KeyCode.L);
-    private readonly GameCharacter gameCharacterM = new GameCharacter('M', KeyCode.M);
-    private readonly GameCharacter gameCharacterN = new GameCharacter('N', KeyCode.N);
-    private readonly GameCharacter gameCharacterO = new GameCharacter('O', KeyCode.O);
-    private readonly GameCharacter gameCharacterP = new GameCharacter('P', KeyCode.P);
-    private readonly GameCharacter gameCharacterQ = new GameCharacter('Q', KeyCode.Q);
-    private readonly GameCharacter gameCharacterR = new GameCharacter('R', KeyCode.R);
-    private readonly GameCharacter gameCharacterS = new GameCharacter('S', KeyCode.S);
-    private readonly GameCharacter gameCharacterT = new GameCharacter('T', KeyCode.T);
-    private readonly GameCharacter gameCharacterU = new GameCharacter('U', KeyCode.U);
-    private readonly GameCharacter gameCharacterV = new GameCharacter('V', KeyCode.V);
-    private readonly GameCharacter gameCharacterW = new GameCharacter('W', KeyCode.W);
-    private readonly GameCharacter gameCharacterX = new GameCharacter('X', KeyCode.X);
-    private readonly GameCharacter gameCharacterY = new GameCharacter('Y', KeyCode.Y);
-    private readonly GameCharacter gameCharacterZ = new GameCharacter('Z', KeyCode.Z);
-
     //List containing all game characters
     public List<GameCharacter> allGameCharacters;
 
@@ -72,39 +44,14 @@ public class GameManagerScript : MonoBehaviour
 
     public delegate void PauseGameEventHandler(object sender, System.EventArgs eventArgs);
     public event PauseGameEventHandler pauseGameEvent;
+
+    private List<FallingElementScript> fallingElementsOnScreen;
     private void Start()
     {
+        //initializing all lists
+        fallingElementsOnScreen = new List<FallingElementScript>();
         audioSource = GetComponent<AudioSource>();
         countdownElapsed = countdownAmt;
-        allGameCharacters = new List<GameCharacter>()
-        {
-            gameCharacterA,
-            gameCharacterB,
-            gameCharacterC,
-            gameCharacterD,
-            gameCharacterE,
-            gameCharacterF,
-            gameCharacterG,
-            gameCharacterH,
-            gameCharacterI,
-            gameCharacterJ,
-            gameCharacterK,
-            gameCharacterL,
-            gameCharacterM,
-            gameCharacterN,
-            gameCharacterO,
-            gameCharacterP,
-            gameCharacterQ,
-            gameCharacterR,
-            gameCharacterS,
-            gameCharacterT,
-            gameCharacterU,
-            gameCharacterV,
-            gameCharacterW,
-            gameCharacterX,
-            gameCharacterY,
-            gameCharacterZ,
-        };
         for (int i = 1; i < lives; i++)
         {
             GameObject.Instantiate(heartUI, heartsUIParent);
@@ -127,8 +74,17 @@ public class GameManagerScript : MonoBehaviour
                 SpawnLetter();
                 ResetCountdownElapsed();
             }
-        }
+            for (int i = 0; i < fallingElementsOnScreen.Count; i++)
+            {
+                if (fallingElementsOnScreen[i].associatedGameCharacter.keyCode == currentKeycodeDetected)
+                {
+                    fallingElementsOnScreen[i].Explode();
+                    PlayAudioClipFromAudioSource(explodeAudioClip, audioSource);
+                    fallingElementsOnScreen.RemoveAt(i);
+                }
+            }
 
+        }
     }
 
     private void SpawnLetter()
@@ -137,7 +93,9 @@ public class GameManagerScript : MonoBehaviour
         {
             FallingElementScript instantiatedOBjectFallingElementScript = GameObject.Instantiate(fallingElement, new Vector3(Random.Range(minSpawnXPosition, maxSpawnXPosition), spawnYPosition, 0), Quaternion.identity).GetComponent<FallingElementScript>();
             instantiatedOBjectFallingElementScript.gameManagerScript = this;
-            instantiatedOBjectFallingElementScript.FallingElementExplodeEvent += OnFallingElementExplode;
+            instantiatedOBjectFallingElementScript.associatedGameCharacter = allGameCharacters[Random.Range(0, allGameCharacters.Count)];
+            instantiatedOBjectFallingElementScript.fallingElementCollideEvent += OnFallingElementCollide;
+            fallingElementsOnScreen.Add(instantiatedOBjectFallingElementScript);
         }
     }
 
@@ -165,11 +123,9 @@ public class GameManagerScript : MonoBehaviour
         return keyCode;
     }
 
-    public void RemoveHealth(int numberOfHealthsToRemove)
+    public void RemoveHealth()
     {
-        audioSource.clip = collideAudioClip;
-        audioSource.Play();
-        lives -= numberOfHealthsToRemove;
+        lives --;
         RemoveHeartUI();
         if (lives <= 0)
         {
@@ -214,10 +170,16 @@ public class GameManagerScript : MonoBehaviour
         DisableFallingElements();
         gamePaused = !gamePaused;
     }
-    
-    private void OnFallingElementExplode(object sender, System.EventArgs eventArgs)
+
+    private void PlayAudioClipFromAudioSource(AudioClip audioClip, AudioSource audioSource)
     {
-        audioSource.clip = explodeAudioClip;
+        audioSource.clip = audioClip;
         audioSource.Play();
+    }
+
+    private void OnFallingElementCollide(object sender, System.EventArgs eventArgs)
+    {
+        PlayAudioClipFromAudioSource(collideAudioClip, audioSource);
+        RemoveHealth();
     }
 }
