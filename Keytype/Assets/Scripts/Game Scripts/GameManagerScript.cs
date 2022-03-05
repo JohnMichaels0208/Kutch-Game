@@ -26,6 +26,10 @@ public class GameManagerScript : MonoBehaviour
     private const float minSpawnXPosition = 7.8f;
     private const float maxSpawnXPosition = -7.8f;
 
+    //Fall speed of the falling elements
+    private float averageFallspeed = 2;
+    private float fallSpeedDifference = 1.5f;
+
     //Countdown Variables
     private float countdownAmt = 0.5f;
     private float countdownElapsed;
@@ -92,6 +96,7 @@ public class GameManagerScript : MonoBehaviour
         for (int i = 0; i < spawnAmtPerCountdown; i++)
         {
             FallingElementScript instantiatedOBjectFallingElementScript = GameObject.Instantiate(fallingElement, new Vector3(Random.Range(minSpawnXPosition, maxSpawnXPosition), spawnYPosition, 0), Quaternion.identity).GetComponent<FallingElementScript>();
+            instantiatedOBjectFallingElementScript.SetRandomFallSpeed(averageFallspeed - fallSpeedDifference/2, averageFallspeed + fallSpeedDifference /2);
             instantiatedOBjectFallingElementScript.gameManagerScript = this;
             instantiatedOBjectFallingElementScript.associatedGameCharacter = allGameCharacters[Random.Range(0, allGameCharacters.Count)];
             instantiatedOBjectFallingElementScript.fallingElementCollideEvent += OnFallingElementCollide;

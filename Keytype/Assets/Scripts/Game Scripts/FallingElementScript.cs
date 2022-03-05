@@ -4,22 +4,20 @@ using TMPro;
 
 public class FallingElementScript : MonoBehaviour
 {
-    private GameObject                              explodeFX;
-    private GameObject                              collisionFX;
+    [SerializeField] private GameObject             explodeFX;
+    [SerializeField] private GameObject             collisionFX;
     [HideInInspector] public GameManagerScript      gameManagerScript;
     private TextMeshPro                             textMeshProUGUI;
     [SerializeField] private GameObject             textGameObject;
 
     private float                                   fallingSpeed = 2f;
-    public GameCharacter                           associatedGameCharacter;
+    public GameCharacter                            associatedGameCharacter;
 
     public delegate void FallingElementCollideEventHandler(object sender, System.EventArgs eventArgs);
     public event FallingElementCollideEventHandler fallingElementCollideEvent;
 
     void Start()
     {
-        explodeFX = transform.GetChild(0).gameObject;
-        collisionFX = transform.GetChild(1).gameObject;
         gameManagerScript.pauseGameEvent += OnDisableFallingElements;
         textMeshProUGUI = textGameObject.transform.GetComponent<TextMeshPro>();
         textMeshProUGUI.text = associatedGameCharacter.label.ToString();
@@ -50,9 +48,10 @@ public class FallingElementScript : MonoBehaviour
 
     public void Explode()
     {
-        explodeFX.SetActive(true);
-        explodeFX.transform.parent = null;
-        Destroy(gameObject);
+        if (explodeFX != null)
+        {
+            explodeFX.SetActive(true);
+        }
     }
 
     private void Collide()
@@ -77,5 +76,10 @@ public class FallingElementScript : MonoBehaviour
         {
             fallingElementCollideEvent.Invoke(this, System.EventArgs.Empty);
         }
+    }
+
+    public void SetRandomFallSpeed(float minFallSpeed, float maxFallSpeed)
+    {
+        fallingSpeed = Random.Range(minFallSpeed, maxFallSpeed);
     }
 }
