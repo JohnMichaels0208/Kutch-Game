@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 [System.Serializable]
-public class OptionData : MonoBehaviour
+public class OptionData
 {
     public float volume;
 
