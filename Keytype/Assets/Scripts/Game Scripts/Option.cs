@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,12 +23,7 @@ public class Option : MonoBehaviour
     {
         LoadOption();
         volumeSliderComponent = volumeSliderGameObject.GetComponent<Slider>();
-        SetSliderValue(volume);
-    }
-
-    private void SetSliderValue(float volumeToSet)
-    {
-        volumeSliderComponent.value = volumeToSet;
+        volumeSliderComponent.value = volume;
     }
 
     public void UpdateOptionVolume()

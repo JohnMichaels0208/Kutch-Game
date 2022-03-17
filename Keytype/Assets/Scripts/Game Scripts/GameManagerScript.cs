@@ -4,9 +4,9 @@ using UnityEngine.Audio;
 
 public class GameManagerScript : MonoBehaviour
 {
-    [SerializeField] private AudioClip explodeAudioClip;
-    [SerializeField] private AudioClip collideAudioClip;
-    [SerializeField] private AudioClip gameOverAudioClip;
+    [SerializeField] private Sound explodeSound;
+    [SerializeField] private Sound collideSound;
+    [SerializeField] private Sound gameOverSound;
 
     //Reference to parent of ui elements
     [SerializeField] private Transform heartsUIParent;
@@ -53,9 +53,11 @@ public class GameManagerScript : MonoBehaviour
     public event PauseGameEventHandler pauseGameEvent;
 
     private List<FallingElementScript> fallingElementsOnScreen;
+
+    private SoundManagerScript soundManagerScript;
     private void Start()
     {
-        UpdateVolume();
+        soundManagerScript = GetComponent<SoundManagerScript>();
         fallingElementsOnScreen = new List<FallingElementScript>();
         audioSource = GetComponent<AudioSource>();
         countdownElapsed = countdownAmt;
@@ -86,7 +88,7 @@ public class GameManagerScript : MonoBehaviour
                 if (fallingElementsOnScreen[i].associatedGameCharacter.keyCode == currentKeycodeDetected)
                 {
                     fallingElementsOnScreen[i].Explode();
-                    PlayAudioClipFromAudioSource(explodeAudioClip, audioSource, GetAudioGroup("AudioMixer1", "Master"));
+                    soundManagerScript.PlaySound(audioSource, explodeSound);
                     fallingElementsOnScreen.RemoveAt(i);
                 }
             }
@@ -152,8 +154,7 @@ public class GameManagerScript : MonoBehaviour
 
     private void EndGame()
     {
-        audioSource.clip = gameOverAudioClip;
-        audioSource.Play();
+        soundManagerScript.PlaySound(audioSource, gameOverSound);
         gameOver = true;
         gameOverUI.SetActive(true);
         DisableFallingElements();
@@ -179,34 +180,14 @@ public class GameManagerScript : MonoBehaviour
         gamePaused = !gamePaused;
     }
 
-    private void PlayAudioClipFromAudioSource(AudioClip audioClip, AudioSource audioSource, AudioMixerGroup audioMixerGroup)
-    {
-        audioSource.outputAudioMixerGroup = audioMixerGroup;
-        audioSource.clip = audioClip;
-        audioSource.Play();
-    }
-
     private void OnFallingElementCollide(object sender, System.EventArgs eventArgs)
     {
-        PlayAudioClipFromAudioSource(collideAudioClip, audioSource, GetAudioGroup("AudioMixer1", "Master"));
+        soundManagerScript.PlaySound(audioSource, collideSound);
         RemoveHealth();
     }
 
     public void ToggleOptions()
     {
         OptionsUI.SetActive(!OptionsUI.activeSelf);
-    }
-
-    public void UpdateVolume()
-    {
-        AudioListener.volume = SaveSystemScript.LoadOption().volume;
-    }
-
-    private AudioMixerGroup GetAudioGroup(string mixerName, string groupName)
-    {
-        AudioMixerGroup audioMixerGroup;
-        AudioMixer audioMixer = Resources.Load<AudioMixer>(mixerName) as AudioMixer;
-        audioMixerGroup = audioMixer.FindMatchingGroups(groupName)[0];
-        return audioMixerGroup;
     }
 }

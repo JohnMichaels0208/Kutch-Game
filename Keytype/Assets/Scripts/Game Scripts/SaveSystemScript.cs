@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.IO;
-
 public static class SaveSystemScript
 {
     public static void SaveOption(Option option)
