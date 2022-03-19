@@ -31,7 +31,7 @@ public class GameManagerScript : MonoBehaviour
 
     //Fall speed of the falling elements
     private float averageFallspeed = 2;
-    private float fallSpeedDifference = 1.5f;
+    private float fallSpeedDifference = 1f;
 
     //Countdown Variables
     private float countdownAmt = 0.5f;
@@ -65,6 +65,7 @@ public class GameManagerScript : MonoBehaviour
         {
             GameObject.Instantiate(heartUI, heartsUIParent);
         }
+
     }
 
     void Update()

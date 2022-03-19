@@ -3,8 +3,8 @@ public class OptionData
 {
     public float volume;
 
-    public OptionData(Option options)
+    public OptionData(Option option)
     {
-        this.volume = options.volume;
+        this.volume = option.volume;
     }
 }
