@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7292639687170800191}
   - component: {fileID: 7292639687170800190}
   - component: {fileID: 869880767859142981}
-  - component: {fileID: 869880767859142980}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -45,15 +44,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8faa175360a4c4cbd01d5eae4084df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explodeSound: {fileID: 0}
+  explodeSound: {fileID: 11400000, guid: 98a68580eedd81346927dac8ad87684e, type: 2}
   collideSound: {fileID: 11400000, guid: 4f0c14729373d914d806a0918d353b64, type: 2}
-  gameOverSound: {fileID: 0}
+  gameOverSound: {fileID: 11400000, guid: 77736985399922443a11b474033a8dc5, type: 2}
   heartsUIParent: {fileID: 0}
   heartUI: {fileID: 1981282484836469372, guid: 291a0db1d028deb40bda92f0f19fe82f, type: 3}
   pauseUI: {fileID: 0}
   gameOverUI: {fileID: 0}
   OptionsUI: {fileID: 0}
   fallingElement: {fileID: 7706307408033676199, guid: 5f0ac2da353087a409329d7fc4a178cf, type: 3}
+  audioMixer: {fileID: 0}
+  averageFallspeed: 2
+  fallSpeedDifference: 1
   allGameCharacters:
   - label: 65
     keyCode: 97
@@ -169,15 +171,3 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &869880767859142980
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7292639687170800188}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7a46172c79dcfd4996f9e03d0bc8b0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

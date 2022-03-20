@@ -1,24 +1,25 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using UnityEngine.Audio;
 
 public class Option : MonoBehaviour
 {
-    [SerializeField] private GameObject volumeSliderGameObject;
-    private Slider volumeSliderComponent;
-
-    public float volume = 1;
+    public float soundEffectsVolume = 0;
+    public bool isFullScreen = true;
+    [SerializeField] private AudioMixer audioMixer;
 
     public void SaveOption()
     {
-        Debug.Log("Saving");
+        SoundManagerScript.UpdateAudioMixerGroupVolume(audioMixer);
+        Screen.fullScreen = isFullScreen;
         SaveSystemScript.SaveOption(this);
     }
 
     public void LoadOption()
     {
         OptionData optionData = SaveSystemScript.LoadOption();
-        this.volume = optionData.volume;
+        this.soundEffectsVolume = optionData.soundEffectsVolume;
     }
 
     private void OnEnable()
@@ -28,12 +29,15 @@ public class Option : MonoBehaviour
             SaveOption();
         }
         LoadOption();
-        volumeSliderComponent = volumeSliderGameObject.GetComponent<Slider>();
-        volumeSliderComponent.value = volume;
     }
 
-    public void UpdateOptionVolume()
+    public void UpdateOptionVolume(Slider slider)
     {
-        volume = volumeSliderComponent.value;
+        soundEffectsVolume = slider.value;
+    }
+
+    public void UpdateOptionIsFullScreen(Toggle toggle)
+    {
+        isFullScreen = toggle.isOn;
     }
 }

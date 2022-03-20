@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -6,7 +5,6 @@ public class FallingElementScript : MonoBehaviour
 {
     [SerializeField] private GameObject             explodeFX;
     [SerializeField] private GameObject             collisionFX;
-    [HideInInspector] public GameManagerScript      gameManagerScript;
     private TextMeshPro                             textMeshProUGUI;
     [SerializeField] private GameObject             textGameObject;
 
@@ -18,13 +16,18 @@ public class FallingElementScript : MonoBehaviour
 
     void Start()
     {
-        gameManagerScript.pauseGameEvent += OnDisableFallingElements;
+        GameManagerScript.instance.pauseGameEvent += OnDisableFallingElements;
         textMeshProUGUI = textGameObject.transform.GetComponent<TextMeshPro>();
         textMeshProUGUI.text = associatedGameCharacter.label.ToString();
+        SetRandomFallSpeed(GameManagerScript.instance.averageFallspeed - GameManagerScript.instance.fallSpeedDifference / 2, GameManagerScript.instance.averageFallspeed + GameManagerScript.instance.fallSpeedDifference / 2);
     }
 
     void Update()
     {
+        if (GameManagerScript.instance.currentKeycodeDetected == associatedGameCharacter.keyCode)
+        {
+            Explode();
+        }
         transform.Translate(Vector3.down * Time.deltaTime * fallingSpeed);
     }
 
@@ -48,6 +51,8 @@ public class FallingElementScript : MonoBehaviour
 
     public void Explode()
     {
+        GameManagerScript.instance.AddPoints();
+        SoundManagerScript.PlaySound(GameManagerScript.instance.audioSource, GameManagerScript.instance.explodeSound);
         if (explodeFX != null)
         {
             explodeFX.SetActive(true);
@@ -56,6 +61,7 @@ public class FallingElementScript : MonoBehaviour
 
     private void Collide()
     {
+        SoundManagerScript.PlaySound(GameManagerScript.instance.audioSource, GameManagerScript.instance.collideSound);
         OnFallingElementCollide();
         collisionFX.SetActive(true);
         collisionFX.transform.parent = null;
@@ -78,7 +84,7 @@ public class FallingElementScript : MonoBehaviour
         }
     }
 
-    public void SetRandomFallSpeed(float minFallSpeed, float maxFallSpeed)
+    private void SetRandomFallSpeed(float minFallSpeed, float maxFallSpeed)
     {
         fallingSpeed = Random.Range(minFallSpeed, maxFallSpeed);
     }

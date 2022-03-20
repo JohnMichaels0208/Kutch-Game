@@ -1,10 +1,13 @@
+using UnityEngine;
 [System.Serializable]
 public class OptionData
 {
-    public float volume;
+    public float soundEffectsVolume;
+    public bool isFullScreen;
 
     public OptionData(Option option)
     {
-        this.volume = option.volume;
+        this.soundEffectsVolume = option.soundEffectsVolume;
+        this.isFullScreen = option.isFullScreen;
     }
 }

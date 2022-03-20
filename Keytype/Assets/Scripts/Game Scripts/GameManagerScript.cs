@@ -1,11 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using TMPro;
 
 public class GameManagerScript : MonoBehaviour
 {
-    [SerializeField] private Sound explodeSound;
-    [SerializeField] private Sound collideSound;
+    public static GameManagerScript instance;
+
+    public Sound explodeSound;
+    public Sound collideSound;
+
     [SerializeField] private Sound gameOverSound;
 
     //Reference to parent of ui elements
@@ -17,27 +21,31 @@ public class GameManagerScript : MonoBehaviour
 
     [SerializeField] private GameObject gameOverUI;
 
-    [SerializeField] private GameObject OptionsUI;
+    [SerializeField] private GameObject optionsUI;
 
-    private AudioSource audioSource;
+    [SerializeField] private GameObject pointsUI;
+
+    [HideInInspector] public AudioSource audioSource;
 
     // Reference to the object to spawn
     [SerializeField] private Transform fallingElement;
 
+    [SerializeField] private AudioMixer audioMixer;
     //Spawn Position Varibles
     private const float spawnYPosition = 6;
     private const float minSpawnXPosition = 7.8f;
     private const float maxSpawnXPosition = -7.8f;
 
     //Fall speed of the falling elements
-    private float averageFallspeed = 2;
-    private float fallSpeedDifference = 1f;
+    public float averageFallspeed = 2;
+    public float fallSpeedDifference = 1f;
 
     //Countdown Variables
     private float countdownAmt = 0.5f;
     private float countdownElapsed;
-    private int spawnAmtPerCountdown = 1;
     private bool countdownComplete;
+
+    private float pointsPerLetterExplode = 50;
 
     //List containing all game characters
     public List<GameCharacter> allGameCharacters;
@@ -54,10 +62,22 @@ public class GameManagerScript : MonoBehaviour
 
     private List<FallingElementScript> fallingElementsOnScreen;
 
-    private SoundManagerScript soundManagerScript;
+    private float totalPoints;
+
+
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            instance = this;
+        }
+    }
     private void Start()
     {
-        soundManagerScript = GetComponent<SoundManagerScript>();
         fallingElementsOnScreen = new List<FallingElementScript>();
         audioSource = GetComponent<AudioSource>();
         countdownElapsed = countdownAmt;
@@ -66,6 +86,7 @@ public class GameManagerScript : MonoBehaviour
             GameObject.Instantiate(heartUI, heartsUIParent);
         }
 
+        SoundManagerScript.UpdateAudioMixerGroupVolume(audioMixer);
     }
 
     void Update()
@@ -84,30 +105,15 @@ public class GameManagerScript : MonoBehaviour
                 SpawnLetter();
                 ResetCountdownElapsed();
             }
-            for (int i = 0; i < fallingElementsOnScreen.Count; i++)
-            {
-                if (fallingElementsOnScreen[i].associatedGameCharacter.keyCode == currentKeycodeDetected)
-                {
-                    fallingElementsOnScreen[i].Explode();
-                    soundManagerScript.PlaySound(audioSource, explodeSound);
-                    fallingElementsOnScreen.RemoveAt(i);
-                }
-            }
-
         }
     }
 
     private void SpawnLetter()
     {
-        for (int i = 0; i < spawnAmtPerCountdown; i++)
-        {
-            FallingElementScript instantiatedOBjectFallingElementScript = GameObject.Instantiate(fallingElement, new Vector3(Random.Range(minSpawnXPosition, maxSpawnXPosition), spawnYPosition, 0), Quaternion.identity).GetComponent<FallingElementScript>();
-            instantiatedOBjectFallingElementScript.SetRandomFallSpeed(averageFallspeed - fallSpeedDifference/2, averageFallspeed + fallSpeedDifference /2);
-            instantiatedOBjectFallingElementScript.gameManagerScript = this;
-            instantiatedOBjectFallingElementScript.associatedGameCharacter = allGameCharacters[Random.Range(0, allGameCharacters.Count)];
-            instantiatedOBjectFallingElementScript.fallingElementCollideEvent += OnFallingElementCollide;
-            fallingElementsOnScreen.Add(instantiatedOBjectFallingElementScript);
-        }
+        FallingElementScript instantiatedObjectFallingElementScript = GameObject.Instantiate(fallingElement, new Vector3(Random.Range(minSpawnXPosition, maxSpawnXPosition), spawnYPosition, 0), Quaternion.identity).GetComponent<FallingElementScript>();
+        instantiatedObjectFallingElementScript.associatedGameCharacter = allGameCharacters[Random.Range(0, allGameCharacters.Count)];
+        instantiatedObjectFallingElementScript.fallingElementCollideEvent += OnFallingElementCollide;
+        fallingElementsOnScreen.Add(instantiatedObjectFallingElementScript);
     }
 
     private float CountDown()
@@ -155,7 +161,7 @@ public class GameManagerScript : MonoBehaviour
 
     private void EndGame()
     {
-        soundManagerScript.PlaySound(audioSource, gameOverSound);
+        SoundManagerScript.PlaySound(audioSource, gameOverSound);
         gameOver = true;
         gameOverUI.SetActive(true);
         DisableFallingElements();
@@ -183,12 +189,17 @@ public class GameManagerScript : MonoBehaviour
 
     private void OnFallingElementCollide(object sender, System.EventArgs eventArgs)
     {
-        soundManagerScript.PlaySound(audioSource, collideSound);
         RemoveHealth();
     }
 
     public void ToggleOptions()
     {
-        OptionsUI.SetActive(!OptionsUI.activeSelf);
+        optionsUI.SetActive(!optionsUI.activeSelf);
+    }
+
+    public void AddPoints()
+    {
+        totalPoints += pointsPerLetterExplode;
+        pointsUI.GetComponent<TextMeshProUGUI>().text = "Points: " + totalPoints;
     }
 }
