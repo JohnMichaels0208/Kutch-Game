@@ -45,7 +45,7 @@ public class GameManagerScript : MonoBehaviour
     private float countdownElapsed;
     private bool countdownComplete;
 
-    private float pointsPerLetterExplode = 50;
+    private float pointsPerLetterExplode = 10;
 
     //List containing all game characters
     public List<GameCharacter> allGameCharacters;
@@ -62,8 +62,8 @@ public class GameManagerScript : MonoBehaviour
 
     private List<FallingElementScript> fallingElementsOnScreen;
 
-    private float totalPoints;
-
+    private float pointsOfGame;
+    public float pointsToSave;
 
     private void Awake()
     {
@@ -78,6 +78,7 @@ public class GameManagerScript : MonoBehaviour
     }
     private void Start()
     {
+        Debug.Log(Application.persistentDataPath);
         fallingElementsOnScreen = new List<FallingElementScript>();
         audioSource = GetComponent<AudioSource>();
         countdownElapsed = countdownAmt;
@@ -199,7 +200,20 @@ public class GameManagerScript : MonoBehaviour
 
     public void AddPoints()
     {
-        totalPoints += pointsPerLetterExplode;
-        pointsUI.GetComponent<TextMeshProUGUI>().text = "Points: " + totalPoints;
+        pointsOfGame += pointsPerLetterExplode;
+        pointsUI.GetComponent<TextMeshProUGUI>().text = "Points: " + pointsOfGame;
+    }
+
+    public void SaveProgress()
+    {
+        if (SaveSystemScript.LoadProgress().bestScore <= pointsOfGame)
+        {
+            pointsToSave = pointsOfGame;
+        }
+        if (SaveSystemScript.LoadProgress().bestScore > pointsOfGame)
+        {
+            pointsToSave = SaveSystemScript.LoadProgress().bestScore;
+        }
+        SaveSystemScript.SaveProgress();
     }
 }
