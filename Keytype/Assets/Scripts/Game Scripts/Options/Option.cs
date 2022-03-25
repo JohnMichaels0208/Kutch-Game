@@ -5,9 +5,11 @@ using UnityEngine.Audio;
 
 public class Option : MonoBehaviour
 {
-    public float soundEffectsVolume = 0;
+    [HideInInspector] public float soundEffectsVolume = 0;
     public bool isFullScreen = true;
     [SerializeField] private AudioMixer audioMixer;
+    [SerializeField] private Slider soundEffectsVolumeSlider;
+    [SerializeField] private Toggle isFullScreenToggle;
 
     public void SaveOption()
     {
@@ -18,8 +20,12 @@ public class Option : MonoBehaviour
 
     public void LoadOption()
     {
+        Debug.Log("Loading option");
         OptionData optionData = SaveSystemScript.LoadOption();
-        this.soundEffectsVolume = optionData.soundEffectsVolume;
+        soundEffectsVolume = optionData.soundEffectsVolume;
+        isFullScreen = optionData.isFullScreen;
+        soundEffectsVolumeSlider.value = soundEffectsVolume;
+        isFullScreenToggle.isOn = isFullScreen;
     }
 
     private void OnEnable()

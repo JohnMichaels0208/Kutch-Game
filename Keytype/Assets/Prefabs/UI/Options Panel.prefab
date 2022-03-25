@@ -737,6 +737,8 @@ MonoBehaviour:
   soundEffectsVolume: 0
   isFullScreen: 1
   audioMixer: {fileID: 24100000, guid: 4164d387c0dade4489098ca517fb4879, type: 2}
+  soundEffectsVolumeSlider: {fileID: 4646248379912816891}
+  isFullScreenToggle: {fileID: 6430821037721742529}
 --- !u!222 &7025965003078724172
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1588,6 +1590,18 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: 2164040, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
+    - target: {fileID: 570439490609095900, guid: 730f543f14e2f9445af0bd612b773ee9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1138452951922162756}
+    - target: {fileID: 570439490609095900, guid: 730f543f14e2f9445af0bd612b773ee9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LoadLevel
+      objectReference: {fileID: 0}
+    - target: {fileID: 570439490609095900, guid: 730f543f14e2f9445af0bd612b773ee9, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ButtonLoadLevelScript, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 570439490609095901, guid: 730f543f14e2f9445af0bd612b773ee9, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1683,6 +1697,24 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 570439490609095901, guid: 730f543f14e2f9445af0bd612b773ee9, type: 3}
   m_PrefabInstance: {fileID: 7025965002953399449}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7380175208969222215 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 570439490609095902, guid: 730f543f14e2f9445af0bd612b773ee9, type: 3}
+  m_PrefabInstance: {fileID: 7025965002953399449}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1138452951922162756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7380175208969222215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5062d2d8c18eed47a2327d1828ff034, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetSceneName: Main Menu
 --- !u!1001 &8790844019186316412
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1740,7 +1772,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6823643216486604072, guid: 5929d4f2842ac8740aed4d11f96e79d3, type: 3}
       propertyPath: m_Name
-      value: Volume (1)
+      value: Full screen
       objectReference: {fileID: 0}
     - target: {fileID: 6823643216486604073, guid: 5929d4f2842ac8740aed4d11f96e79d3, type: 3}
       propertyPath: m_Pivot.x

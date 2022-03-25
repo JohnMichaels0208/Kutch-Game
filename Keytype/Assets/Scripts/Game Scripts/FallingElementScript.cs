@@ -8,14 +8,14 @@ public class FallingElementScript : MonoBehaviour
     private TextMeshPro                             textMeshProUGUI;
     [SerializeField] private GameObject             textGameObject;
 
-    private float                                   fallingSpeed = 2f;
-    public GameCharacter                            associatedGameCharacter;
+    private float                                   fallingSpeed;
+    private GameCharacter                           associatedGameCharacter;
 
-    public delegate void FallingElementCollideEventHandler(object sender, System.EventArgs eventArgs);
-    public event FallingElementCollideEventHandler fallingElementCollideEvent;
+    private float accelerationAmount;
 
     void Start()
     {
+        SetRandomAssociatedGameCharacter();
         GameManagerScript.instance.pauseGameEvent += OnDisableFallingElements;
         textMeshProUGUI = textGameObject.transform.GetComponent<TextMeshPro>();
         textMeshProUGUI.text = associatedGameCharacter.label.ToString();
@@ -24,11 +24,12 @@ public class FallingElementScript : MonoBehaviour
 
     void Update()
     {
-        if (GameManagerScript.instance.currentKeycodeDetected == associatedGameCharacter.keyCode)
+        if (GameManagerScript.instance.currentKeycodeDetected == associatedGameCharacter.keyCode && GameManagerScript.instance.currentKeycodeDetected != KeyCode.None)
         {
             Explode();
         }
-        transform.Translate(Vector3.down * Time.deltaTime * fallingSpeed);
+        accelerationAmount += Time.deltaTime * GameManagerScript.instance.accelerationSpeed;
+        transform.Translate(Vector3.down * Time.deltaTime * Mathf.Lerp(0, fallingSpeed, accelerationAmount));
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -61,8 +62,8 @@ public class FallingElementScript : MonoBehaviour
 
     private void Collide()
     {
+        GameManagerScript.instance.RemoveHealth();
         SoundManagerScript.PlaySound(GameManagerScript.instance.audioSource, GameManagerScript.instance.collideSound);
-        OnFallingElementCollide();
         collisionFX.SetActive(true);
         collisionFX.transform.parent = null;
         Destroy(gameObject);
@@ -76,12 +77,9 @@ public class FallingElementScript : MonoBehaviour
         }
     }
 
-    protected virtual void OnFallingElementCollide()
+    private void SetRandomAssociatedGameCharacter()
     {
-        if (fallingElementCollideEvent != null)
-        {
-            fallingElementCollideEvent.Invoke(this, System.EventArgs.Empty);
-        }
+        associatedGameCharacter = GameManagerScript.instance.gameCharacters[Random.Range(0, GameManagerScript.instance.gameCharacters.Count)];
     }
 
     private void SetRandomFallSpeed(float minFallSpeed, float maxFallSpeed)

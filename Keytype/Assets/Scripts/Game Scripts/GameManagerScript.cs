@@ -13,7 +13,7 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] private Sound gameOverSound;
 
     //Reference to parent of ui elements
-    [SerializeField] private Transform heartsUIParent;
+    [SerializeField] private Transform heartUIParent;
 
     [SerializeField] private GameObject heartUI;
 
@@ -32,7 +32,7 @@ public class GameManagerScript : MonoBehaviour
 
     [SerializeField] private AudioMixer audioMixer;
     //Spawn Position Varibles
-    private const float spawnYPosition = 6;
+    private const float spawnYPosition = 5f;
     private const float minSpawnXPosition = 7.8f;
     private const float maxSpawnXPosition = -7.8f;
 
@@ -42,13 +42,12 @@ public class GameManagerScript : MonoBehaviour
 
     //Countdown Variables
     private float countdownAmt = 0.5f;
-    private float countdownElapsed;
-    private bool countdownComplete;
+    private float timerElapsed;
 
     private float pointsPerLetterExplode = 10;
 
     //List containing all game characters
-    public List<GameCharacter> allGameCharacters;
+    public List<GameCharacter> gameCharacters;
 
     [HideInInspector] public KeyCode currentKeycodeDetected;
 
@@ -60,10 +59,9 @@ public class GameManagerScript : MonoBehaviour
     public delegate void PauseGameEventHandler(object sender, System.EventArgs eventArgs);
     public event PauseGameEventHandler pauseGameEvent;
 
-    private List<FallingElementScript> fallingElementsOnScreen;
-
+    public float accelerationSpeed = 50f;
     private float pointsOfGame;
-    public float pointsToSave;
+    [HideInInspector] public float pointsToSave;
 
     private void Awake()
     {
@@ -76,20 +74,19 @@ public class GameManagerScript : MonoBehaviour
             instance = this;
         }
     }
+
     private void Start()
     {
-        Debug.Log(Application.persistentDataPath);
-        fallingElementsOnScreen = new List<FallingElementScript>();
+        Debug.Log(accelerationSpeed);
         audioSource = GetComponent<AudioSource>();
-        countdownElapsed = countdownAmt;
+        timerElapsed = countdownAmt;
         for (int i = 1; i < lives; i++)
         {
-            GameObject.Instantiate(heartUI, heartsUIParent);
+            GameObject.Instantiate(heartUI, heartUIParent);
         }
 
         SoundManagerScript.UpdateAudioMixerGroupVolume(audioMixer);
     }
-
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -99,35 +96,19 @@ public class GameManagerScript : MonoBehaviour
         if (!gameOver && !gamePaused)
         {
             currentKeycodeDetected = GetCurrentInputKeycode();
-            countdownComplete = countdownElapsed <= 0;
-            CountDown();
-            if (countdownComplete)
+            timerElapsed -= Time.deltaTime;
+            if (timerElapsed <= 0)
             {
                 SpawnLetter();
-                ResetCountdownElapsed();
+                timerElapsed = countdownAmt;
             }
         }
     }
 
     private void SpawnLetter()
     {
-        FallingElementScript instantiatedObjectFallingElementScript = GameObject.Instantiate(fallingElement, new Vector3(Random.Range(minSpawnXPosition, maxSpawnXPosition), spawnYPosition, 0), Quaternion.identity).GetComponent<FallingElementScript>();
-        instantiatedObjectFallingElementScript.associatedGameCharacter = allGameCharacters[Random.Range(0, allGameCharacters.Count)];
-        instantiatedObjectFallingElementScript.fallingElementCollideEvent += OnFallingElementCollide;
-        fallingElementsOnScreen.Add(instantiatedObjectFallingElementScript);
+        GameObject.Instantiate(fallingElement, new Vector3(Random.Range(minSpawnXPosition, maxSpawnXPosition), spawnYPosition, 0), Quaternion.identity).GetComponent<FallingElementScript>();
     }
-
-    private float CountDown()
-    {
-        this.countdownElapsed -= Time.deltaTime;
-        return countdownElapsed;
-    }
-
-    private void ResetCountdownElapsed()
-    {
-        this.countdownElapsed = this.countdownAmt;
-    }
-
     private KeyCode GetCurrentInputKeycode()
     {
         KeyCode keyCode = KeyCode.None;
@@ -140,7 +121,6 @@ public class GameManagerScript : MonoBehaviour
         }
         return keyCode;
     }
-
     public void RemoveHealth()
     {
         lives --;
@@ -151,15 +131,13 @@ public class GameManagerScript : MonoBehaviour
             lives = 0;
         }
     }
-
     private void RemoveHeartUI()
     {
-        if (heartsUIParent.GetChild(0).gameObject != null)
+        if (heartUIParent.GetChild(0).gameObject != null)
         {
-            Destroy(heartsUIParent.GetChild(0).gameObject);
+            Destroy(heartUIParent.GetChild(0).gameObject);
         }
     }
-
     private void EndGame()
     {
         SoundManagerScript.PlaySound(audioSource, gameOverSound);
@@ -167,7 +145,6 @@ public class GameManagerScript : MonoBehaviour
         gameOverUI.SetActive(true);
         DisableFallingElements();
     }
-
     protected virtual void OnDisableFallingElements()
     {
         if (pauseGameEvent != null)
@@ -175,35 +152,29 @@ public class GameManagerScript : MonoBehaviour
             pauseGameEvent.Invoke(this, System.EventArgs.Empty);
         }
     }
-
     public void DisableFallingElements()
     {
         OnDisableFallingElements();
     }
-
     public void TogglePauseGame()
     {
         pauseUI.SetActive(!pauseUI.activeSelf);
         DisableFallingElements();
         gamePaused = !gamePaused;
     }
-
     private void OnFallingElementCollide(object sender, System.EventArgs eventArgs)
     {
         RemoveHealth();
     }
-
     public void ToggleOptions()
     {
         optionsUI.SetActive(!optionsUI.activeSelf);
     }
-
     public void AddPoints()
     {
         pointsOfGame += pointsPerLetterExplode;
         pointsUI.GetComponent<TextMeshProUGUI>().text = "Points: " + pointsOfGame;
     }
-
     public void SaveProgress()
     {
         if (SaveSystemScript.LoadProgress().bestScore <= pointsOfGame)

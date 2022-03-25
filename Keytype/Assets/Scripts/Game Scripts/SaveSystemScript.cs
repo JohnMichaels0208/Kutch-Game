@@ -16,7 +16,6 @@ public static class SaveSystemScript
 
     public static OptionData LoadOption()
     {
-        Debug.Log(Application.persistentDataPath);
         string path = Application.persistentDataPath + optionSaveFileName;
         if (!File.Exists(path))
         {
