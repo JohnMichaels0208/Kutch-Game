@@ -104,7 +104,6 @@ public static class SaveSystemScript
         string json;
         string path = Application.persistentDataPath + levelSaveFileName;
         bool levelexists = false;
-        Debug.Log(path);
         if (!File.Exists(path))
         {
             CreateLevel();

@@ -1,18 +1,28 @@
 using UnityEngine;
+using TMPro;
 
 public class LevelPanelScript : MonoBehaviour
 {
+    [SerializeField] private GameObject levelDataDisplayerGO;
+    private GameObject instantiatedLevelButton;
+    [SerializeField] private GameObject levelButton;
     public string levelName;
-    [TextArea]
-    public string levelDescription;
+    public string levelSceneName;
+    [TextArea] public string levelDescription;
 
     public void CreateNewLevel()
     {
-        SaveSystemScript.SaveLevel(new LevelData(levelName, levelDescription));
+        instantiatedLevelButton = Instantiate(levelButton, transform);
+        LevelData levelData = new LevelData(levelName, levelDescription, instantiatedLevelButton, levelSceneName);
+        instantiatedLevelButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = levelData.levelName;
+        instantiatedLevelButton.GetComponent<LevelButtonScript>().levelDataDisplayer = levelDataDisplayerGO;
+        instantiatedLevelButton.GetComponent<LevelButtonScript>().associtatedLevelData = levelData;
+        SaveSystemScript.SaveLevel(levelData);
     }
 
     public void DeleteLevelByName()
     {
-        SaveSystemScript.DeleteLevel(SaveSystemScript.LoadLevelByName(levelName));  
+        DestroyImmediate(SaveSystemScript.LoadLevelByName(levelName).associatedButton);
+        SaveSystemScript.DeleteLevel(SaveSystemScript.LoadLevelByName(levelName));
     }
 }

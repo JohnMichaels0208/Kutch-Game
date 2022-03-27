@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ButtonLoadLevelScript : MonoBehaviour
 {
-    [SerializeField] private string targetSceneName;
+    public string targetSceneName;
     public void LoadLevel()
     {
         if (targetSceneName != null)

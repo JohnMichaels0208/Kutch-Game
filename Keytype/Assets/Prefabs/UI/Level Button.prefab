@@ -150,6 +150,7 @@ GameObject:
   - component: {fileID: 803252364199871466}
   - component: {fileID: 803252364199871477}
   - component: {fileID: 922994335526184719}
+  - component: {fileID: 3473227086445643610}
   m_Layer: 5
   m_Name: Level Button
   m_TagString: Untagged
@@ -259,25 +260,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 922994335526184719}
-        m_TargetAssemblyTypeName: ButtonLoadLevelScript, Assembly-CSharp
-        m_MethodName: LoadLevel
+      - m_Target: {fileID: 3473227086445643610}
+        m_TargetAssemblyTypeName: LevelButtonScript, Assembly-CSharp
+        m_MethodName: SetCurrentActiveLevelData
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ButtonLoadLevelScript, Assembly-CSharp
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -371,4 +360,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5062d2d8c18eed47a2327d1828ff034, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetSceneName: Level 1
+  targetSceneName: 
+--- !u!114 &3473227086445643610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803252364199871468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca3a1ebd8b1bcd2479d3dc743a41303b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  associtatedLevelData:
+    levelName: 
+    levelDescription: 
+    levelSceneName: 
+    associatedButton: {fileID: 0}
+  levelDataDisplayer: {fileID: 0}
