@@ -16,6 +16,7 @@ public class FallingElementScript : MonoBehaviour
     void Start()
     {
         SetRandomAssociatedGameCharacter();
+        GameManagerScript.instance.keyDownEvent += OnKeyDown;
         GameManagerScript.instance.pauseGameEvent += OnDisableFallingElements;
         textMeshProUGUI = textGameObject.transform.GetComponent<TextMeshPro>();
         textMeshProUGUI.text = associatedGameCharacter.label.ToString();
@@ -24,10 +25,6 @@ public class FallingElementScript : MonoBehaviour
 
     void Update()
     {
-        if (GameManagerScript.instance.currentKeycodeDetected == associatedGameCharacter.keyCode && GameManagerScript.instance.currentKeycodeDetected != KeyCode.None)
-        {
-            Explode();
-        }
         accelerationAmount += Time.deltaTime * GameManagerScript.instance.accelerationSpeed;
         transform.Translate(Vector3.down * Time.deltaTime * Mathf.Lerp(0, fallingSpeed, accelerationAmount));
     }
@@ -50,8 +47,17 @@ public class FallingElementScript : MonoBehaviour
         TogglePauseFallingElements();
     }
 
+    private void OnKeyDown(object sender, System.EventArgs eventArgs, KeyCode currentKeyCodeDetected)
+    {
+        if (currentKeyCodeDetected == associatedGameCharacter.keyCode)
+        {
+            Explode();
+        }
+    }
+
     public void Explode()
     {
+        fallingSpeed = 0;
         GameManagerScript.instance.AddPoints();
         SoundManagerScript.PlaySound(GameManagerScript.instance.audioSource, GameManagerScript.instance.explodeSound);
         if (explodeFX != null)
@@ -59,13 +65,13 @@ public class FallingElementScript : MonoBehaviour
             explodeFX.SetActive(true);
         }
     }
-
+        
     private void Collide()
     {
-        GameManagerScript.instance.RemoveHealth();
         SoundManagerScript.PlaySound(GameManagerScript.instance.audioSource, GameManagerScript.instance.collideSound);
         collisionFX.SetActive(true);
         collisionFX.transform.parent = null;
+        GameManagerScript.instance.RemoveHealth();
         Destroy(gameObject);
     }
 

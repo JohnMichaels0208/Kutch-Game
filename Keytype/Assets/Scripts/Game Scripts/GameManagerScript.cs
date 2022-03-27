@@ -49,17 +49,25 @@ public class GameManagerScript : MonoBehaviour
     //List containing all game characters
     public List<GameCharacter> gameCharacters;
 
-    [HideInInspector] public KeyCode currentKeycodeDetected;
+    private KeyCode currentKeyCodeDetected;
 
     [HideInInspector] public int lives = 1;
 
     private bool gameOver;
     private bool gamePaused = false;
 
+    //event when game is paused
     public delegate void PauseGameEventHandler(object sender, System.EventArgs eventArgs);
     public event PauseGameEventHandler pauseGameEvent;
 
-    public float accelerationSpeed = 50f;
+    //event where a key is pressed down
+    public delegate void KeyDownEventHandler(object sender, System.EventArgs eventArgs, KeyCode keyCodeDetected);
+    public event KeyDownEventHandler keyDownEvent;
+
+    //acceleration speed when falling element spawned
+    public float accelerationSpeed = 2f;
+
+    //game data
     private float pointsOfGame;
     [HideInInspector] public float pointsToSave;
 
@@ -77,7 +85,6 @@ public class GameManagerScript : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log(accelerationSpeed);
         audioSource = GetComponent<AudioSource>();
         timerElapsed = countdownAmt;
         for (int i = 1; i < lives; i++)
@@ -95,12 +102,16 @@ public class GameManagerScript : MonoBehaviour
         }
         if (!gameOver && !gamePaused)
         {
-            currentKeycodeDetected = GetCurrentInputKeycode();
+            currentKeyCodeDetected = GetCurrentInputKeycode();
             timerElapsed -= Time.deltaTime;
             if (timerElapsed <= 0)
             {
                 SpawnLetter();
                 timerElapsed = countdownAmt;
+            }
+            if (currentKeyCodeDetected != KeyCode.None)
+            {
+                OnKeyDown(currentKeyCodeDetected);
             }
         }
     }
@@ -116,6 +127,7 @@ public class GameManagerScript : MonoBehaviour
         {
             if (Input.GetKeyDown(kcode))
             {
+                Debug.Log(kcode);
                 return keyCode = kcode;
             }
         }
@@ -124,18 +136,14 @@ public class GameManagerScript : MonoBehaviour
     public void RemoveHealth()
     {
         lives --;
-        RemoveHeartUI();
+        if (heartUIParent.GetChild(0).gameObject != null)
+        {
+            Destroy(heartUIParent.GetChild(0).gameObject);
+        }
         if (lives <= 0)
         {
             EndGame();
             lives = 0;
-        }
-    }
-    private void RemoveHeartUI()
-    {
-        if (heartUIParent.GetChild(0).gameObject != null)
-        {
-            Destroy(heartUIParent.GetChild(0).gameObject);
         }
     }
     private void EndGame()
@@ -143,7 +151,7 @@ public class GameManagerScript : MonoBehaviour
         SoundManagerScript.PlaySound(audioSource, gameOverSound);
         gameOver = true;
         gameOverUI.SetActive(true);
-        DisableFallingElements();
+        OnDisableFallingElements();
     }
     protected virtual void OnDisableFallingElements()
     {
@@ -152,19 +160,19 @@ public class GameManagerScript : MonoBehaviour
             pauseGameEvent.Invoke(this, System.EventArgs.Empty);
         }
     }
-    public void DisableFallingElements()
+    protected virtual void OnKeyDown(KeyCode keyCodeEventData)
     {
-        OnDisableFallingElements();
+        if (keyDownEvent != null)
+        {
+            keyDownEvent.Invoke(this, System.EventArgs.Empty, keyCodeEventData);
+        }
     }
+
     public void TogglePauseGame()
     {
         pauseUI.SetActive(!pauseUI.activeSelf);
-        DisableFallingElements();
+        OnDisableFallingElements();
         gamePaused = !gamePaused;
-    }
-    private void OnFallingElementCollide(object sender, System.EventArgs eventArgs)
-    {
-        RemoveHealth();
     }
     public void ToggleOptions()
     {
