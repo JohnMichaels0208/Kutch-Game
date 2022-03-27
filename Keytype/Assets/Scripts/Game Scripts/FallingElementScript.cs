@@ -9,7 +9,7 @@ public class FallingElementScript : MonoBehaviour
     [SerializeField] private GameObject             textGameObject;
 
     private float                                   fallingSpeed;
-    private GameCharacter                           associatedGameCharacter;
+    private KeyCode                           associatedKeyCode;
 
     private float accelerationAmount;
 
@@ -19,7 +19,7 @@ public class FallingElementScript : MonoBehaviour
         GameManagerScript.instance.keyDownEvent += OnKeyDown;
         GameManagerScript.instance.pauseGameEvent += OnDisableFallingElements;
         textMeshProUGUI = textGameObject.transform.GetComponent<TextMeshPro>();
-        textMeshProUGUI.text = associatedGameCharacter.label.ToString();
+        textMeshProUGUI.text = associatedKeyCode.ToString();
         SetRandomFallSpeed(GameManagerScript.instance.averageFallspeed - GameManagerScript.instance.fallSpeedDifference / 2, GameManagerScript.instance.averageFallspeed + GameManagerScript.instance.fallSpeedDifference / 2);
     }
 
@@ -49,7 +49,7 @@ public class FallingElementScript : MonoBehaviour
 
     private void OnKeyDown(object sender, System.EventArgs eventArgs, KeyCode currentKeyCodeDetected)
     {
-        if (currentKeyCodeDetected == associatedGameCharacter.keyCode)
+        if (currentKeyCodeDetected == associatedKeyCode)
         {
             Explode();
         }
@@ -85,7 +85,7 @@ public class FallingElementScript : MonoBehaviour
 
     private void SetRandomAssociatedGameCharacter()
     {
-        associatedGameCharacter = GameManagerScript.instance.gameCharacters[Random.Range(0, GameManagerScript.instance.gameCharacters.Count)];
+        associatedKeyCode = GameManagerScript.instance.keyCodes[Random.Range(0, GameManagerScript.instance.keyCodes.Count)];
     }
 
     private void SetRandomFallSpeed(float minFallSpeed, float maxFallSpeed)

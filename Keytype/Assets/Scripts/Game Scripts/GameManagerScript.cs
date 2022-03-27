@@ -46,8 +46,8 @@ public class GameManagerScript : MonoBehaviour
 
     private float pointsPerLetterExplode = 10;
 
-    //List containing all game characters
-    public List<GameCharacter> gameCharacters;
+    //List containing all game keycodes
+    public List<KeyCode> keyCodes;
 
     private KeyCode currentKeyCodeDetected;
 
@@ -70,7 +70,6 @@ public class GameManagerScript : MonoBehaviour
     //game data
     private float pointsOfGame;
     [HideInInspector] public float pointsToSave;
-
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -89,7 +88,7 @@ public class GameManagerScript : MonoBehaviour
         timerElapsed = countdownAmt;
         for (int i = 1; i < lives; i++)
         {
-            GameObject.Instantiate(heartUI, heartUIParent);
+            Instantiate(heartUI, heartUIParent);
         }
 
         SoundManagerScript.UpdateAudioMixerGroupVolume(audioMixer);
