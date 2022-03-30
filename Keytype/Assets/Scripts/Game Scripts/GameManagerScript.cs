@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using TMPro;
+using System.Linq;
 
 public class GameManagerScript : MonoBehaviour
 {
@@ -24,6 +25,11 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] private GameObject optionsUI;
 
     [SerializeField] private GameObject pointsUI;
+
+    [SerializeField] private GameObject mistakeText;
+    private TextMeshProUGUI mistakeTMP;
+    public readonly string wrongKeyMistakeText = "Wrong Key Pressed!";
+    public readonly string collidedMistakeText = "Text Block Collided!";
 
     [HideInInspector] public AudioSource audioSource;
 
@@ -49,7 +55,12 @@ public class GameManagerScript : MonoBehaviour
     //List containing all game keycodes
     public List<KeyCode> keyCodes;
 
+    public Dictionary<KeyCode, bool> keyCodesOnScreeen = new Dictionary<KeyCode, bool>() { };
+    private bool valueOfKeyCodeDetected;
+
     private KeyCode currentKeyCodeDetected;
+
+    private KeyCode[] exceptionKeyCodes = new KeyCode[] { KeyCode.Mouse0, KeyCode.Mouse1, KeyCode.Mouse2, KeyCode.Escape};
 
     [HideInInspector] public int lives = 1;
 
@@ -65,7 +76,7 @@ public class GameManagerScript : MonoBehaviour
     public event KeyDownEventHandler keyDownEvent;
 
     //acceleration speed when falling element spawned
-    public float accelerationSpeed = 2f;
+    public readonly float accelerationSpeed = 2f;
 
     //game data
     private float pointsOfGame;
@@ -84,13 +95,17 @@ public class GameManagerScript : MonoBehaviour
 
     private void Start()
     {
+        mistakeTMP = mistakeText.GetComponent<TextMeshProUGUI>();
+        for (int i = 0; i < keyCodes.Count; i++)
+        {
+            keyCodesOnScreeen.Add(keyCodes[i], false);
+        }
         audioSource = GetComponent<AudioSource>();
         timerElapsed = countdownAmt;
         for (int i = 1; i < lives; i++)
         {
             Instantiate(heartUI, heartUIParent);
         }
-
         SoundManagerScript.UpdateAudioMixerGroupVolume(audioMixer);
     }
     void Update()
@@ -111,6 +126,10 @@ public class GameManagerScript : MonoBehaviour
             if (currentKeyCodeDetected != KeyCode.None)
             {
                 OnKeyDown(currentKeyCodeDetected);
+                if (!keyCodesOnScreeen.TryGetValue(currentKeyCodeDetected, out valueOfKeyCodeDetected) && !valueOfKeyCodeDetected)
+                {
+                    RemoveHealth(wrongKeyMistakeText);
+                }
             }
         }
     }
@@ -121,19 +140,19 @@ public class GameManagerScript : MonoBehaviour
     }
     private KeyCode GetCurrentInputKeycode()
     {
-        KeyCode keyCode = KeyCode.None;
         foreach (KeyCode kcode in System.Enum.GetValues(typeof(KeyCode)))
         {
-            if (Input.GetKeyDown(kcode))
+            if (Input.GetKeyDown(kcode) && !exceptionKeyCodes.Contains(kcode))
             {
-                Debug.Log(kcode);
-                return keyCode = kcode;
+                return kcode;
             }
         }
-        return keyCode;
+        return KeyCode.None;
     }
-    public void RemoveHealth()
+    public void RemoveHealth(string reasonText)
     {
+        mistakeText.SetActive(true);
+        mistakeTMP.text = reasonText;
         lives --;
         if (heartUIParent.GetChild(0).gameObject != null)
         {
@@ -166,7 +185,6 @@ public class GameManagerScript : MonoBehaviour
             keyDownEvent.Invoke(this, System.EventArgs.Empty, keyCodeEventData);
         }
     }
-
     public void TogglePauseGame()
     {
         pauseUI.SetActive(!pauseUI.activeSelf);

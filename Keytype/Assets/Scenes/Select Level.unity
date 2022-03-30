@@ -490,9 +490,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelDataDisplayerGO: {fileID: 738620136}
   levelButton: {fileID: 803252364199871468, guid: 43454bf9b97062a42b69d21a45739b25, type: 3}
-  levelName: Level 1
+  levelName: Level 3
   levelSceneName: Level 1
-  levelDescription: Basic level for beginners
+  levelDescription: Very impossible.
 --- !u!1 &430910683
 GameObject:
   m_ObjectHideFlags: 0

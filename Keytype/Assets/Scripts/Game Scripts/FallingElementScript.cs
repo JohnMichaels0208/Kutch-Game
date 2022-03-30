@@ -16,6 +16,7 @@ public class FallingElementScript : MonoBehaviour
     void Start()
     {
         SetRandomAssociatedGameCharacter();
+        GameManagerScript.instance.keyCodesOnScreeen[associatedKeyCode] = true;
         GameManagerScript.instance.keyDownEvent += OnKeyDown;
         GameManagerScript.instance.pauseGameEvent += OnDisableFallingElements;
         textMeshProUGUI = textGameObject.transform.GetComponent<TextMeshPro>();
@@ -57,6 +58,7 @@ public class FallingElementScript : MonoBehaviour
 
     public void Explode()
     {
+        GameManagerScript.instance.keyCodesOnScreeen[associatedKeyCode] = false;
         fallingSpeed = 0;
         GameManagerScript.instance.AddPoints();
         SoundManagerScript.PlaySound(GameManagerScript.instance.audioSource, GameManagerScript.instance.explodeSound);
@@ -71,7 +73,9 @@ public class FallingElementScript : MonoBehaviour
         SoundManagerScript.PlaySound(GameManagerScript.instance.audioSource, GameManagerScript.instance.collideSound);
         collisionFX.SetActive(true);
         collisionFX.transform.parent = null;
-        GameManagerScript.instance.RemoveHealth();
+        Debug.Log("collided");
+        GameManagerScript.instance.RemoveHealth(GameManagerScript.instance.collidedMistakeText);
+        Debug.Log(GameManagerScript.instance.collidedMistakeText);
         Destroy(gameObject);
     }
 
