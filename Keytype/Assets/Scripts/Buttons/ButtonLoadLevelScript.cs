@@ -6,7 +6,7 @@ public class ButtonLoadLevelScript : MonoBehaviour
     public string targetSceneName;
     public void LoadLevel()
     {
-        if (targetSceneName != null)
+        if (targetSceneName.Length > 0)
         {
             if (CheckSceneExists(targetSceneName))
             {

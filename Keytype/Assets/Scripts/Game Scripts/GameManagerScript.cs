@@ -60,7 +60,7 @@ public class GameManagerScript : MonoBehaviour
 
     private KeyCode currentKeyCodeDetected;
 
-    private KeyCode[] exceptionKeyCodes = new KeyCode[] { KeyCode.Mouse0, KeyCode.Mouse1, KeyCode.Mouse2, KeyCode.Escape};
+    private KeyCode[] exceptionKeyCodes = new KeyCode[] { KeyCode.Mouse0, KeyCode.Mouse1, KeyCode.Mouse2, KeyCode.Escape };
 
     [HideInInspector] public int lives = 1;
 
@@ -79,7 +79,7 @@ public class GameManagerScript : MonoBehaviour
     public readonly float accelerationSpeed = 2f;
 
     //game data
-    private float pointsOfGame;
+    public float pointsOfGame { get; private set; } = 0;
     [HideInInspector] public float pointsToSave;
     private void Awake()
     {
@@ -200,6 +200,7 @@ public class GameManagerScript : MonoBehaviour
         pointsOfGame += pointsPerLetterExplode;
         pointsUI.GetComponent<TextMeshProUGUI>().text = "Points: " + pointsOfGame;
     }
+
     public void SaveProgress()
     {
         if (SaveSystemScript.LoadProgress().bestScore <= pointsOfGame)

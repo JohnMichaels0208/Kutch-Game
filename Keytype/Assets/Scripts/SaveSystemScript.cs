@@ -131,11 +131,10 @@ public static class SaveSystemScript
         }
         LevelSaveClass level = new LevelSaveClass(levelsData);
         json = JsonUtility.ToJson(level);
-        Debug.Log(json);
         File.WriteAllText(path, json);
     }
 
-    public static void DeleteLevel(LevelData levelData)
+    public static void DeleteLevelData(LevelData levelData)
     {
         string path = Application.persistentDataPath + levelSaveFileName;
         List<LevelData> levels = LoadLevelList();
@@ -147,7 +146,6 @@ public static class SaveSystemScript
             }
         }
         string json = JsonUtility.ToJson(new LevelSaveClass(levels));
-        Debug.Log(json);
         File.WriteAllText(path, json);
     }
 }

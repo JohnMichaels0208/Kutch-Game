@@ -14,7 +14,7 @@ public class LevelPanelScript : MonoBehaviour
     {
         instantiatedLevelButton = Instantiate(levelButton, transform);
         LevelData levelData = new LevelData(levelName, levelDescription, instantiatedLevelButton, levelSceneName);
-        instantiatedLevelButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = levelData.levelName;
+        instantiatedLevelButton.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().text = levelData.levelName;
         instantiatedLevelButton.GetComponent<LevelButtonScript>().levelDataDisplayer = levelDataDisplayerGO;
         instantiatedLevelButton.GetComponent<LevelButtonScript>().associtatedLevelData = levelData;
         SaveSystemScript.SaveLevel(levelData);
@@ -22,7 +22,8 @@ public class LevelPanelScript : MonoBehaviour
 
     public void DeleteLevelByName()
     {
+        Debug.Log("destroying");
         DestroyImmediate(SaveSystemScript.LoadLevelByName(levelName).associatedButton);
-        SaveSystemScript.DeleteLevel(SaveSystemScript.LoadLevelByName(levelName));
+        SaveSystemScript.DeleteLevelData(SaveSystemScript.LoadLevelByName(levelName));
     }
 }
