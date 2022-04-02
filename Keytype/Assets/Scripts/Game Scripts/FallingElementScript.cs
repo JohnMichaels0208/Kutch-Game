@@ -13,6 +13,7 @@ public class FallingElementScript : MonoBehaviour
 
     private float accelerationAmount;
 
+
     void Start()
     {
         SetRandomAssociatedGameCharacter();
@@ -73,9 +74,7 @@ public class FallingElementScript : MonoBehaviour
         SoundManagerScript.PlaySound(GameManagerScript.instance.audioSource, GameManagerScript.instance.collideSound);
         collisionFX.SetActive(true);
         collisionFX.transform.parent = null;
-        Debug.Log("collided");
         GameManagerScript.instance.RemoveHealth(GameManagerScript.instance.collidedMistakeText);
-        Debug.Log(GameManagerScript.instance.collidedMistakeText);
         Destroy(gameObject);
     }
 

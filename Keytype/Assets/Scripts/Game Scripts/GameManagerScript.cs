@@ -47,7 +47,7 @@ public class GameManagerScript : MonoBehaviour
     public float fallSpeedDifference = 1f;
 
     //Countdown Variables
-    private float countdownAmt = 0.5f;
+    [SerializeField] private float countdownAmt = 0.5f;
     private float timerElapsed;
 
     private float pointsPerLetterExplode = 10;
@@ -154,14 +154,14 @@ public class GameManagerScript : MonoBehaviour
         mistakeText.SetActive(true);
         mistakeTMP.text = reasonText;
         lives --;
-        if (heartUIParent.GetChild(0).gameObject != null)
-        {
-            Destroy(heartUIParent.GetChild(0).gameObject);
-        }
         if (lives <= 0)
         {
             EndGame();
             lives = 0;
+        }
+        else if (heartUIParent.GetChild(0).gameObject != null)
+        {
+            Destroy(heartUIParent.GetChild(0).gameObject);
         }
     }
     private void EndGame()
