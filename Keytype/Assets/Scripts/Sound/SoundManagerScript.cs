@@ -13,8 +13,8 @@ public class SoundManagerScript : MonoBehaviour
         audioSource.Play();
     }
 
-    public static void UpdateAudioMixerGroupVolume(AudioMixer audioMixer)
+    public static void UpdateAudioMixerGroupVolume(AudioMixer audioMixer, float volume)
     {
-        audioMixer.SetFloat(soundEffectGroupName, Mathf.Log10(SaveSystemScript.LoadOption().soundEffectsVolume)*20);
+        audioMixer.SetFloat(soundEffectGroupName, Mathf.Log10(volume)*20);
     }
 }

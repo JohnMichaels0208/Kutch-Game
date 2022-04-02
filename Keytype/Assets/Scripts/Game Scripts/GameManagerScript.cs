@@ -106,7 +106,7 @@ public class GameManagerScript : MonoBehaviour
         {
             Instantiate(heartUI, heartUIParent);
         }
-        SoundManagerScript.UpdateAudioMixerGroupVolume(audioMixer);
+        SoundManagerScript.UpdateAudioMixerGroupVolume(audioMixer, SaveSystemScript.LoadOption().soundEffectsVolume);
     }
     void Update()
     {

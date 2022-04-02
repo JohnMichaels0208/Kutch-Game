@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.IO;
 using UnityEngine.Audio;
 
 public class Option : MonoBehaviour
@@ -13,14 +12,14 @@ public class Option : MonoBehaviour
 
     public void SaveOption()
     {
-        SoundManagerScript.UpdateAudioMixerGroupVolume(audioMixer);
+        Debug.Log(soundEffectsVolume + "   |   " + Mathf.Log10(soundEffectsVolume) * 20);
+        SoundManagerScript.UpdateAudioMixerGroupVolume(audioMixer, soundEffectsVolume);
         Screen.fullScreen = isFullScreen;
         SaveSystemScript.SaveOption(this);
     }
 
     public void LoadOption()
     {
-        Debug.Log("Loading option");
         OptionData optionData = SaveSystemScript.LoadOption();
         soundEffectsVolume = optionData.soundEffectsVolume;
         isFullScreen = optionData.isFullScreen;
