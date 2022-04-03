@@ -1,98 +1,44 @@
 using UnityEngine;
-using TMPro;
-
-public class FallingElementScript : MonoBehaviour
+public class FallingElementScript : FallingElementBase
 {
-    [SerializeField] private GameObject             explodeFX;
-    [SerializeField] private GameObject             collisionFX;
-    private TextMeshPro                             textMeshProUGUI;
-    [SerializeField] private GameObject             textGameObject;
-
-    private float                                   fallingSpeed;
-    private KeyCode                           associatedKeyCode;
-
-    private float accelerationAmount;
-
-
-    void Start()
+    protected override void Awake()
     {
-        SetRandomAssociatedGameCharacter();
-        GameManagerScript.instance.keyCodesOnScreeen[associatedKeyCode] = true;
-        GameManagerScript.instance.keyDownEvent += OnKeyDown;
-        GameManagerScript.instance.pauseGameEvent += OnDisableFallingElements;
-        textMeshProUGUI = textGameObject.transform.GetComponent<TextMeshPro>();
-        textMeshProUGUI.text = associatedKeyCode.ToString();
-        SetRandomFallSpeed(GameManagerScript.instance.averageFallspeed - GameManagerScript.instance.fallSpeedDifference / 2, GameManagerScript.instance.averageFallspeed + GameManagerScript.instance.fallSpeedDifference / 2);
+        base.Awake();
     }
 
-    void Update()
+    protected override void Start()
     {
-        accelerationAmount += Time.deltaTime * GameManagerScript.instance.accelerationSpeed;
-        transform.Translate(Vector3.down * Time.deltaTime * Mathf.Lerp(0, fallingSpeed, accelerationAmount));
+        base.Start();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected override void Update()
     {
-        if (collision.transform.tag == "Death Zone")
-        {
-            Collide();
-        }
-    }
-        
-    private void OnEndGame(object sender, System.EventArgs eventArgs)
-    {
-        TogglePauseFallingElements();
+        base.Update();
     }
 
-    private void OnDisableFallingElements(object sender, System.EventArgs eventArgs)
+    protected override void Collide()
     {
-        TogglePauseFallingElements();
-    }
-
-    private void OnKeyDown(object sender, System.EventArgs eventArgs, KeyCode currentKeyCodeDetected)
-    {
-        if (currentKeyCodeDetected == associatedKeyCode)
-        {
-            Explode();
-        }
-    }
-
-    public void Explode()
-    {
-        GameManagerScript.instance.keyCodesOnScreeen[associatedKeyCode] = false;
-        fallingSpeed = 0;
-        GameManagerScript.instance.AddPoints();
-        SoundManagerScript.PlaySound(GameManagerScript.instance.audioSource, GameManagerScript.instance.explodeSound);
-        if (explodeFX != null)
-        {
-            explodeFX.SetActive(true);
-        }
-    }
-        
-    private void Collide()
-    {
+        base.Collide();
         SoundManagerScript.PlaySound(GameManagerScript.instance.audioSource, GameManagerScript.instance.collideSound);
-        collisionFX.SetActive(true);
-        collisionFX.transform.parent = null;
-        GameManagerScript.instance.RemoveHealth(GameManagerScript.instance.collidedMistakeText);
-        Destroy(gameObject);
+    }
+    protected override void OnTriggerEnter2D(Collider2D collision)
+    {
+        base.OnTriggerEnter2D(collision);
     }
 
-    private void TogglePauseFallingElements()
+    protected override void CorrectKey()
     {
-        if (this != null)
-        {
-            enabled = !enabled;
-        }
+        base.CorrectKey();
+        SoundManagerScript.PlaySound(GameManagerScript.instance.audioSource, GameManagerScript.instance.normalLetterCorrectKeySound);
     }
 
-    private void SetRandomAssociatedGameCharacter()
+    protected override void Blast()
     {
-        associatedKeyCode = GameManagerScript.instance.keyCodes[Random.Range(0, GameManagerScript.instance.keyCodes.Count)];
+        base.Blast();
     }
 
-    private void SetRandomFallSpeed(float minFallSpeed, float maxFallSpeed)
+    public override void OnFXAnimationEnd()
     {
-        fallingSpeed = Random.Range(minFallSpeed, maxFallSpeed);
+        base.OnFXAnimationEnd();
     }
 }

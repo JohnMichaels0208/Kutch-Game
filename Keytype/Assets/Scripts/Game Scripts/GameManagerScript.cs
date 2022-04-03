@@ -8,8 +8,9 @@ public class GameManagerScript : MonoBehaviour
 {
     public static GameManagerScript instance;
 
-    public Sound explodeSound;
     public Sound collideSound;
+    public Sound normalLetterCorrectKeySound;
+    public Sound bombLetterCorrectKeySound;
 
     [SerializeField] private Sound gameOverSound;
 
@@ -33,8 +34,14 @@ public class GameManagerScript : MonoBehaviour
 
     [HideInInspector] public AudioSource audioSource;
 
-    // Reference to the object to spawn
-    [SerializeField] private Transform fallingElement;
+    [System.Serializable]
+    public struct FallingElementPropability
+    {
+        public Transform fallingElement;
+        public int propablility;
+    }
+
+    public FallingElementPropability[] fallingElementAndPropabilityOfGame;
 
     [SerializeField] private AudioMixer audioMixer;
     //Spawn Position Varibles
@@ -53,7 +60,7 @@ public class GameManagerScript : MonoBehaviour
     private float pointsPerLetterExplode = 10;
 
     //List containing all game keycodes
-    public List<KeyCode> keyCodes;
+    public KeyCode[] keyCodes;
 
     public Dictionary<KeyCode, bool> keyCodesOnScreeen = new Dictionary<KeyCode, bool>() { };
     private bool valueOfKeyCodeDetected;
@@ -96,7 +103,7 @@ public class GameManagerScript : MonoBehaviour
     private void Start()
     {
         mistakeTMP = mistakeText.GetComponent<TextMeshProUGUI>();
-        for (int i = 0; i < keyCodes.Count; i++)
+        for (int i = 0; i < keyCodes.Length; i++)
         {
             keyCodesOnScreeen.Add(keyCodes[i], false);
         }
@@ -120,7 +127,7 @@ public class GameManagerScript : MonoBehaviour
             timerElapsed -= Time.deltaTime;
             if (timerElapsed <= 0)
             {
-                SpawnLetter();
+                SpawnLetter(GetRandomFallingElement(fallingElementAndPropabilityOfGame));
                 timerElapsed = countdownAmt;
             }
             if (currentKeyCodeDetected != KeyCode.None)
@@ -134,9 +141,33 @@ public class GameManagerScript : MonoBehaviour
         }
     }
 
-    private void SpawnLetter()
+    private Transform GetRandomFallingElement(FallingElementPropability[] fallingElementPropabilitiesToSelect)
     {
-        GameObject.Instantiate(fallingElement, new Vector3(Random.Range(minSpawnXPosition, maxSpawnXPosition), spawnYPosition, 0), Quaternion.identity).GetComponent<FallingElementScript>();
+        int totalLength = 0;
+        for (int i = 0; i<fallingElementAndPropabilityOfGame.Length; i++)
+        {
+             totalLength += fallingElementAndPropabilityOfGame[i].propablility;
+        }
+        
+        Transform[] fallingElementsWithProbability = new Transform[totalLength];
+
+        int index = 0;
+
+        for (int j = 0; j < fallingElementPropabilitiesToSelect.Length; j++)
+        {
+            for (int i = 0; i < fallingElementPropabilitiesToSelect[j].propablility; i++)
+            {
+                fallingElementsWithProbability[index] = fallingElementPropabilitiesToSelect[j].fallingElement;
+                index++;
+            }
+        }
+        int randomIndex = Random.Range(0, fallingElementsWithProbability.Length);
+        return fallingElementsWithProbability[randomIndex];
+    }
+
+    private void SpawnLetter(Transform transformToInstantiate)
+    {
+        Instantiate(transformToInstantiate, new Vector3(Random.Range(minSpawnXPosition, maxSpawnXPosition), spawnYPosition, 0), Quaternion.identity);
     }
     private KeyCode GetCurrentInputKeycode()
     {

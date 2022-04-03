@@ -1704,7 +1704,7 @@ GameObject:
   - component: {fileID: 741088462}
   - component: {fileID: 741088461}
   - component: {fileID: 741088460}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Death Zone
   m_TagString: Death Zone
   m_Icon: {fileID: 0}
@@ -2919,7 +2919,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 4f0c14729373d914d806a0918d353b64, type: 2}
     - target: {fileID: 7292639687170800190, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
       propertyPath: countdownAmt
-      value: 0.1
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 7292639687170800190, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
       propertyPath: explodeSound
@@ -2943,7 +2943,7 @@ PrefabInstance:
       objectReference: {fileID: 795893261}
     - target: {fileID: 7292639687170800190, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
       propertyPath: averageFallspeed
-      value: 2.5
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 7292639687170800190, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
       propertyPath: accelerationSpeed
@@ -2957,6 +2957,10 @@ PrefabInstance:
       propertyPath: keyCodes.Array.size
       value: 26
       objectReference: {fileID: 0}
+    - target: {fileID: 7292639687170800190, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
+      propertyPath: bombLetterExplodeSound
+      value: 
+      objectReference: {fileID: 11400000, guid: 80d261405111b6d49b9ce4b05f1610a6, type: 2}
     - target: {fileID: 7292639687170800190, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
       propertyPath: keyCodes.Array.data[0]
       value: 113
@@ -3062,9 +3066,21 @@ PrefabInstance:
       value: 109
       objectReference: {fileID: 0}
     - target: {fileID: 7292639687170800190, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
+      propertyPath: normalLetterExplodeSound
+      value: 
+      objectReference: {fileID: 11400000, guid: 98a68580eedd81346927dac8ad87684e, type: 2}
+    - target: {fileID: 7292639687170800190, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
+      propertyPath: bombLetterCorrectKeySound
+      value: 
+      objectReference: {fileID: 11400000, guid: 80d261405111b6d49b9ce4b05f1610a6, type: 2}
+    - target: {fileID: 7292639687170800190, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
       propertyPath: gameCharacters.Array.size
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 7292639687170800190, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
+      propertyPath: normalLetterCorrectKeySound
+      value: 
+      objectReference: {fileID: 11400000, guid: 98a68580eedd81346927dac8ad87684e, type: 2}
     - target: {fileID: 7292639687170800190, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
       propertyPath: gameCharacters.Array.data[0].label
       value: 83
@@ -3137,6 +3153,30 @@ PrefabInstance:
       propertyPath: gameCharacters.Array.data[8].keyCode
       value: 108
       objectReference: {fileID: 0}
+    - target: {fileID: 7292639687170800190, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
+      propertyPath: fallingElementAndPropability.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7292639687170800190, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
+      propertyPath: fallingElementAndPropabilityOfGame.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7292639687170800190, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
+      propertyPath: fallingElementAndPropabilityOfGame.Array.data[0].propablility
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7292639687170800190, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
+      propertyPath: fallingElementAndPropabilityOfGame.Array.data[1].propablility
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7292639687170800190, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
+      propertyPath: fallingElementAndPropabilityOfGame.Array.data[0].fallingElement
+      value: 
+      objectReference: {fileID: 7706307408033676199, guid: 5f0ac2da353087a409329d7fc4a178cf, type: 3}
+    - target: {fileID: 7292639687170800190, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
+      propertyPath: fallingElementAndPropabilityOfGame.Array.data[1].fallingElement
+      value: 
+      objectReference: {fileID: 5787774803890716497, guid: 5b6b07252bc6fb64680fdc855b358316, type: 3}
     - target: {fileID: 7292639687170800191, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
       propertyPath: m_RootOrder
       value: 1
