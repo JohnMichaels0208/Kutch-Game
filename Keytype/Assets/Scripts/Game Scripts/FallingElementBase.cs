@@ -3,6 +3,7 @@ using TMPro;
 
 public class FallingElementBase : MonoBehaviour
 {
+    protected AudioSource audioSourceComponent;
     private Animator animatorComponent;
     private TextMeshPro tmpComponent;
     [SerializeField] private GameObject textGO;
@@ -17,6 +18,7 @@ public class FallingElementBase : MonoBehaviour
 
     protected virtual void Awake()
     {
+        audioSourceComponent = GetComponent<AudioSource>();
         animatorComponent = GetComponent<Animator>();
         tmpComponent = textGO.transform.GetComponent<TextMeshPro>();
     }
@@ -80,15 +82,12 @@ public class FallingElementBase : MonoBehaviour
 
     protected virtual void Blast()
     {
-        fallingSpeed = 0;
-        if (animatorComponent != null)
-        {
-            animatorComponent.SetBool(animatorCollidedParamName, true);
-        }
+        GameManagerScript.instance.keyCodesOnScreeen[associatedKeyCode] = false;
     }
 
     protected virtual void Collide()
     {
+        GameManagerScript.instance.keyCodesOnScreeen[associatedKeyCode] = false;
         fallingSpeed = 0;
         if (animatorComponent != null)
         {

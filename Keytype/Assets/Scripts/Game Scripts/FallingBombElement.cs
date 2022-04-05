@@ -24,21 +24,21 @@ public class FallingBombElement : FallingElementBase
     }
     protected override void Collide()
     {
+        SoundManagerScript.PlaySound(base.audioSourceComponent, GameManagerScript.instance.collideSound);
         base.Collide();
-        SoundManagerScript.PlaySound(GameManagerScript.instance.audioSource, GameManagerScript.instance.collideSound);
     }
     protected override void Blast()
     {
         CorrectKey();
-        base.Blast();
     }
     protected override void CorrectKey()
     {
-        base.CorrectKey();
-        SoundManagerScript.PlaySound(GameManagerScript.instance.audioSource, GameManagerScript.instance.bombLetterCorrectKeySound);
+        SoundManagerScript.PlaySound(base.audioSourceComponent, GameManagerScript.instance.bombLetterCorrectKeySound);
         if (particleGO != null)
         {
             particleGO.GetComponent<ParticleSystem>().Play();
         }
+        base.CorrectKey();
+
     }
 }

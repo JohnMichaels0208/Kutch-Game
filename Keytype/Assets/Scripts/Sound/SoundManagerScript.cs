@@ -8,6 +8,10 @@ public class SoundManagerScript : MonoBehaviour
 
     public static void PlaySound(AudioSource audioSource, Sound soundToPlay)
     {
+        if (audioSource == null)
+        {
+            return;
+        }
         audioSource.outputAudioMixerGroup = soundToPlay.group;
         audioSource.clip = soundToPlay.clip;
         audioSource.Play();

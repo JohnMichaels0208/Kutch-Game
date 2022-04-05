@@ -63,7 +63,7 @@ public class GameManagerScript : MonoBehaviour
     public KeyCode[] keyCodes;
 
     public Dictionary<KeyCode, bool> keyCodesOnScreeen = new Dictionary<KeyCode, bool>() { };
-    private bool valueOfKeyCodeDetected;
+    private bool isKeyCodeDetectedOnScreen;
 
     private KeyCode currentKeyCodeDetected;
 
@@ -88,6 +88,8 @@ public class GameManagerScript : MonoBehaviour
     //game data
     public float pointsOfGame { get; private set; } = 0;
     [HideInInspector] public float pointsToSave;
+
+    [SerializeField] private GameObject keyCodesOnScreenDebugger;
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -130,10 +132,16 @@ public class GameManagerScript : MonoBehaviour
                 SpawnLetter(GetRandomFallingElement(fallingElementAndPropabilityOfGame));
                 timerElapsed = countdownAmt;
             }
+            string stringToDisplay = "";
+            foreach (KeyValuePair<KeyCode, bool> kvp in keyCodesOnScreeen)
+            {
+                stringToDisplay += "Key: " + kvp.Key + ", Value: " + kvp.Value + "\n";
+            }
+            keyCodesOnScreenDebugger.GetComponent<TextMeshProUGUI>().text = stringToDisplay;
             if (currentKeyCodeDetected != KeyCode.None)
             {
                 OnKeyDown(currentKeyCodeDetected);
-                if (!keyCodesOnScreeen.TryGetValue(currentKeyCodeDetected, out valueOfKeyCodeDetected) && !valueOfKeyCodeDetected)
+                if (!keyCodesOnScreeen.TryGetValue(currentKeyCodeDetected, out isKeyCodeDetectedOnScreen) || isKeyCodeDetectedOnScreen == false)
                 {
                     RemoveHealth(wrongKeyMistakeText);
                 }
@@ -190,7 +198,7 @@ public class GameManagerScript : MonoBehaviour
             EndGame();
             lives = 0;
         }
-        else if (heartUIParent.GetChild(0).gameObject != null)
+        if (heartUIParent.childCount > 0)
         {
             Destroy(heartUIParent.GetChild(0).gameObject);
         }

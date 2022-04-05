@@ -9,9 +9,9 @@ AnimatorOverrideController:
   m_Name: Bomb Falling Element
   m_Controller: {fileID: 9100000, guid: c1ec79874c9d711408629f81d34fa7a8, type: 2}
   m_Clips:
-  - m_OriginalClip: {fileID: 7400000, guid: 277b53da8a72a644ba0cc268ae0ec85a, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: e79395f042070d14c892d5f0df0bb68a, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: 8f4337d763bf4b94fa9a1200f2da1358, type: 2}
-  - m_OriginalClip: {fileID: 7400000, guid: cbc843508901a3946bef0abd7af8d6f7, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: dc5a8403ecc6b4d40b6957e19ffabe54, type: 2}
-  - m_OriginalClip: {fileID: 7400000, guid: dcafa8d8169c52f46aa1d2b8014bea49, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 36342ecf1b58fa74aaf7e74a11d4e54d, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: 2424aae4d8b8ef146b1d16f6f47643d2, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 6c379dfde0a8a4348b1101d61fef35c6, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: dc5a8403ecc6b4d40b6957e19ffabe54, type: 2}
