@@ -28,6 +28,9 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] private GameObject pointsUI;
 
     [SerializeField] private GameObject mistakeText;
+    
+    [SerializeField] private AudioMixer audioMixer;
+
     private TextMeshProUGUI mistakeTMP;
     public readonly string wrongKeyMistakeText = "Wrong Key Pressed!";
     public readonly string collidedMistakeText = "Text Block Collided!";
@@ -43,7 +46,8 @@ public class GameManagerScript : MonoBehaviour
 
     public FallingElementPropability[] fallingElementAndPropabilityOfGame;
 
-    [SerializeField] private AudioMixer audioMixer;
+    public KeyCode[] keyCodes;
+
     //Spawn Position Varibles
     private const float spawnYPosition = 5f;
     private const float minSpawnXPosition = 7.8f;
@@ -59,17 +63,13 @@ public class GameManagerScript : MonoBehaviour
 
     private float pointsPerLetterExplode = 10;
 
-    //List containing all game keycodes
-    public KeyCode[] keyCodes;
-
     public Dictionary<KeyCode, bool> keyCodesOnScreeen = new Dictionary<KeyCode, bool>() { };
     private bool isKeyCodeDetectedOnScreen;
 
     private KeyCode currentKeyCodeDetected;
 
     private KeyCode[] exceptionKeyCodes = new KeyCode[] { KeyCode.Mouse0, KeyCode.Mouse1, KeyCode.Mouse2, KeyCode.Escape };
-
-    [HideInInspector] public int lives = 1;
+    
 
     private bool gameOver;
     private bool gamePaused = false;
@@ -84,12 +84,11 @@ public class GameManagerScript : MonoBehaviour
 
     //acceleration speed when falling element spawned
     public readonly float accelerationSpeed = 2f;
-
+    [HideInInspector] public int lives = 1;
     //game data
     public float pointsOfGame { get; private set; } = 0;
     [HideInInspector] public float pointsToSave;
 
-    [SerializeField] private GameObject keyCodesOnScreenDebugger;
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -132,18 +131,15 @@ public class GameManagerScript : MonoBehaviour
                 SpawnLetter(GetRandomFallingElement(fallingElementAndPropabilityOfGame));
                 timerElapsed = countdownAmt;
             }
-            string stringToDisplay = "";
-            foreach (KeyValuePair<KeyCode, bool> kvp in keyCodesOnScreeen)
-            {
-                stringToDisplay += "Key: " + kvp.Key + ", Value: " + kvp.Value + "\n";
-            }
-            keyCodesOnScreenDebugger.GetComponent<TextMeshProUGUI>().text = stringToDisplay;
             if (currentKeyCodeDetected != KeyCode.None)
             {
-                OnKeyDown(currentKeyCodeDetected);
-                if (!keyCodesOnScreeen.TryGetValue(currentKeyCodeDetected, out isKeyCodeDetectedOnScreen) || isKeyCodeDetectedOnScreen == false)
+                if (keyCodesOnScreeen.TryGetValue(currentKeyCodeDetected, out isKeyCodeDetectedOnScreen) && !isKeyCodeDetectedOnScreen || !keyCodesOnScreeen.TryGetValue(currentKeyCodeDetected, out isKeyCodeDetectedOnScreen))
                 {
                     RemoveHealth(wrongKeyMistakeText);
+                }
+                else if (keyCodesOnScreeen.TryGetValue(currentKeyCodeDetected, out isKeyCodeDetectedOnScreen) && isKeyCodeDetectedOnScreen)
+                {
+                    OnKeyDown(currentKeyCodeDetected);
                 }
             }
         }
