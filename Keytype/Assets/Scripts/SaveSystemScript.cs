@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
-using System;
+
 public static class SaveSystemScript
 {
     public const string optionSaveFileName = "/optionsavefile.json";
@@ -13,7 +13,7 @@ public static class SaveSystemScript
     public static void SaveOption(Option option)
     {
         string path = Application.persistentDataPath + optionSaveFileName;
-        OptionData optionData = new OptionData(option.soundEffectsVolume, option.isFullScreen);
+        OptionData optionData = new OptionData(option.soundEffectsVolume, option.gameSoundVolume, option.isFullScreen);
         string json = JsonUtility.ToJson(optionData);
         File.WriteAllText(path, json);
     }
@@ -33,37 +33,8 @@ public static class SaveSystemScript
     public static void CreateOption()
     {
         string path = Application.persistentDataPath + optionSaveFileName;
-        OptionData optionData = new OptionData(0, true);
+        OptionData optionData = new OptionData(1, 1, true);
         string json = JsonUtility.ToJson(optionData);
-        File.WriteAllText(path, json);
-    }
-
-    public static void SaveProgress()
-    {
-        string path = Application.persistentDataPath + progressSaveFileName;
-        ProgressData progressData = new ProgressData(GameManagerScript.instance.pointsToSave);
-        string json = JsonUtility.ToJson(progressData);
-        File.WriteAllText(path, json);
-    }
-
-    public static ProgressData LoadProgress()
-    {
-        string path = Application.persistentDataPath + progressSaveFileName;
-        Debug.Log(path);
-        if (!File.Exists(path))
-        {
-            CreateProgress();
-        }
-        string json = File.ReadAllText(path);
-        ProgressData progressData = JsonUtility.FromJson<ProgressData>(json);
-        return progressData;
-    }
-
-    public static void CreateProgress()
-    {
-        string path = Application.persistentDataPath + progressSaveFileName;
-        ProgressData progressData = new ProgressData(0);
-        string json = JsonUtility.ToJson(progressData);
         File.WriteAllText(path, json);
     }
 
@@ -86,65 +57,70 @@ public static class SaveSystemScript
         return levelDataList;
     }
 
-    public static LevelData LoadLevelByName(string name)
+    public static int LoadLevelIndexByGO(GameObject button)
     {
-        List<LevelData> levels = LoadLevelList();
-        for (int i = 0; i < levels.Count; i++)
+        List<LevelData> levelDatas = LoadLevelList();
+        for (int i = 0; i < levelDatas.Count; i++)
         {
-            if (levels[i].levelName == name)
+            if (ReferenceEquals(levelDatas[i].associatedButton, button))
             {
-                return levels[i];
+                return i;
             }
         }
-        return null;
+        return 0;
     }
 
-    public static void SaveLevel(LevelData levelData)
+    public static void SaveLevelData(int index, LevelData data)
     {
         string json;
         string path = Application.persistentDataPath + levelSaveFileName;
-        bool levelexists = false;
         if (!File.Exists(path))
         {
             CreateLevel();
         }
-        List<LevelData> levelsData = LoadLevelList();
-        if (levelsData.Count == 0)
-        {
-            levelsData = new List<LevelData> { levelData };
-        }
-        if (levelsData.Count > 0)
-        {
-            for (int i = 0; i < levelsData.Count; i++)
-            {
-                if (levelsData[i].levelName.Equals(levelData.levelName))
-                {
-                    levelsData[i] = levelData;
-                    levelexists = true;
-                }
-            }
-            if (!levelexists)
-            {
-                levelsData.Add(levelData);
-            }
-
-        }
-        LevelSaveClass level = new LevelSaveClass(levelsData);
+        List<LevelData> levelDatas = LoadLevelList();
+        levelDatas[index] = data;
+        LevelSaveClass level = new LevelSaveClass(levelDatas);
         json = JsonUtility.ToJson(level);
         File.WriteAllText(path, json);
     }
 
-    public static void DeleteLevelData(LevelData levelData)
+    public static void SaveLevelProgress(int index, float bestPoints, int stars)
+    {
+        string json;
+        string path = Application.persistentDataPath + levelSaveFileName;
+        if (!File.Exists(path))
+        {
+            CreateLevel();
+        }
+        List<LevelData> levelDatas = LoadLevelList();
+        levelDatas[index].bestPoints = bestPoints;
+        levelDatas[index].stars = stars;
+        LevelSaveClass level = new LevelSaveClass(levelDatas);
+        json = JsonUtility.ToJson(level);
+        File.WriteAllText(path, json);
+    }
+
+    public static void AddLevelData(LevelData levelData)
+    {
+        string json;
+        string path = Application.persistentDataPath + levelSaveFileName;
+        if (!File.Exists(path))
+        {
+            CreateLevel();
+        }
+        List<LevelData> levelDatas = LoadLevelList();
+        levelDatas.Add(levelData);
+        LevelSaveClass level = new LevelSaveClass(levelDatas);
+        json = JsonUtility.ToJson(level);
+        File.WriteAllText(path, json);
+    }
+
+    public static void DeleteLevelData(int index)
     {
         string path = Application.persistentDataPath + levelSaveFileName;
         List<LevelData> levels = LoadLevelList();
-        for (int i = 0; i<levels.Count; i++)
-        {
-            if (levelData.levelName == levels[i].levelName)
-            {
-                levels.RemoveAt(i);
-            }
-        }
+        levels.RemoveAt(index);
         string json = JsonUtility.ToJson(new LevelSaveClass(levels));
         File.WriteAllText(path, json);
     }

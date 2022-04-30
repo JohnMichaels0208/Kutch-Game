@@ -4,7 +4,8 @@ using UnityEngine.Audio;
 
 public class Option : MonoBehaviour
 {
-    [HideInInspector] public float soundEffectsVolume = 0;
+    [HideInInspector] public float soundEffectsVolume = 1;
+    [HideInInspector] public float gameSoundVolume = 1;
     public bool isFullScreen = true;
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private Slider soundEffectsVolumeSlider;
@@ -12,8 +13,8 @@ public class Option : MonoBehaviour
 
     public void SaveOption()
     {
-        Debug.Log(soundEffectsVolume + "   |   " + Mathf.Log10(soundEffectsVolume) * 20);
-        SoundManagerScript.UpdateAudioMixerGroupVolume(audioMixer, soundEffectsVolume);
+        SoundManagerScript.UpdateAudioMixerGroupVolume(audioMixer, SoundManagerScript.gameSoundGroupName, gameSoundVolume);
+        SoundManagerScript.UpdateAudioMixerGroupVolume(audioMixer, SoundManagerScript.soundEffectGroupName, soundEffectsVolume);
         Screen.fullScreen = isFullScreen;
         SaveSystemScript.SaveOption(this);
     }
@@ -32,9 +33,14 @@ public class Option : MonoBehaviour
         LoadOption();
     }
 
-    public void UpdateOptionVolume(Slider slider)
+    public void UpdateSoundEffectsOptionVolume(Slider slider)
     {
-        soundEffectsVolume = slider.value;
+        soundEffectsVolume = SoundManagerScript.SliderValueToAudioMixerGroupValue(slider.value);
+    }
+
+    public void UpdateGameSoundOptionVolume(Slider slider)
+    {
+        gameSoundVolume = SoundManagerScript.SliderValueToAudioMixerGroupValue(slider.value);
     }
 
     public void UpdateOptionIsFullScreen(Toggle toggle)

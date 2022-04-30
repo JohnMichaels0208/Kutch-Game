@@ -3,27 +3,33 @@ using TMPro;
 
 public class LevelPanelScript : MonoBehaviour
 {
-    [SerializeField] private GameObject levelDataDisplayerGO;
     private GameObject instantiatedLevelButton;
-    [SerializeField] private GameObject levelButton;
+    [SerializeField] private GameObject levelDataDisplayerGO;
+    [SerializeField] private GameObject levelButtonToInstantiate;
+    [Header("Level to create data")]
     public string levelName;
     public string levelSceneName;
+    public float levelPointsForOneStar;
     [TextArea] public string levelDescription;
 
     public void CreateNewLevel()
     {
-        instantiatedLevelButton = Instantiate(levelButton, transform);
-        LevelData levelData = new LevelData(levelName, levelDescription, instantiatedLevelButton, levelSceneName);
-        instantiatedLevelButton.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().text = levelData.levelName;
-        instantiatedLevelButton.GetComponent<LevelButtonScript>().levelDataDisplayer = levelDataDisplayerGO;
-        instantiatedLevelButton.GetComponent<LevelButtonScript>().associtatedLevelData = levelData;
-        SaveSystemScript.SaveLevel(levelData);
+        LevelData levelData = new LevelData(levelName, levelDescription, instantiatedLevelButton, levelSceneName, levelPointsForOneStar);
+        instantiatedLevelButton = Instantiate(levelButtonToInstantiate, transform);
+        SyncLevelDataWithUI(levelData, instantiatedLevelButton);
+        SaveSystemScript.AddLevelData(levelData);
     }
 
-    public void DeleteLevelByName()
+    public void SyncLevelDataWithUI(LevelData data, GameObject levelButtonGO)
     {
-        Debug.Log("destroying");
-        DestroyImmediate(SaveSystemScript.LoadLevelByName(levelName).associatedButton);
-        SaveSystemScript.DeleteLevelData(SaveSystemScript.LoadLevelByName(levelName));
+        //setting game object name
+        levelButtonGO.name = levelName;
+        //setting ui text name
+        levelButtonGO.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().text = data.levelName;
+        //setting properties
+        LevelButtonScript levelButtonScriptComponent = levelButtonGO.GetComponent<LevelButtonScript>();
+        levelButtonScriptComponent.levelDataDisplayer = levelDataDisplayerGO;
+        levelButtonScriptComponent.associatedLevelData = data;
+        levelButtonScriptComponent.SyncLevelToSaveProperties(data);
     }
 }

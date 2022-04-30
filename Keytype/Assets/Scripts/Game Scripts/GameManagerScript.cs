@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using TMPro;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class GameManagerScript : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class GameManagerScript : MonoBehaviour
     public Sound bombLetterCorrectKeySound;
 
     [SerializeField] private Sound gameOverSound;
+    [SerializeField] private Sound gameEndedSound;
 
     //Reference to parent of ui elements
     [SerializeField] private Transform heartUIParent;
@@ -28,10 +30,12 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] private GameObject pointsUI;
 
     [SerializeField] private GameObject mistakeText;
-    
+
     [SerializeField] private AudioMixer audioMixer;
 
-    private TextMeshProUGUI mistakeTMP;
+    [SerializeField] private GameObject levelCompleteUI;
+
+    private TextMeshProUGUI mistakeDisplayerTextComponent;
     public readonly string wrongKeyMistakeText = "Wrong Key Pressed!";
     public readonly string collidedMistakeText = "Text Block Collided!";
 
@@ -69,9 +73,9 @@ public class GameManagerScript : MonoBehaviour
     private KeyCode currentKeyCodeDetected;
 
     private KeyCode[] exceptionKeyCodes = new KeyCode[] { KeyCode.Mouse0, KeyCode.Mouse1, KeyCode.Mouse2, KeyCode.Escape };
-    
 
-    private bool gameOver;
+
+    private bool gameEnded;
     private bool gamePaused = false;
 
     //event when game is paused
@@ -85,12 +89,23 @@ public class GameManagerScript : MonoBehaviour
     //acceleration speed when falling element spawned
     public readonly float accelerationSpeed = 2f;
     [HideInInspector] public int lives = 1;
+
+    public float pointsForOneStar;
+    public int starsOfGame { get; private set; } = 0;
+
+    private OneStarCondition oneStarCondition = new OneStarCondition();
+    private TwoStarCondition twoStarCondition = new TwoStarCondition();
+    private ThreeStarCondition threeStarCondition = new ThreeStarCondition();
+
+    protected StarBaseCondition[] starConditions;
+
     //game data
     public float pointsOfGame { get; private set; } = 0;
     [HideInInspector] public float pointsToSave;
 
     private void Awake()
     {
+        starConditions = new StarBaseCondition[3] {oneStarCondition, twoStarCondition, threeStarCondition};
         if (instance != null && instance != this)
         {
             Destroy(this);
@@ -99,22 +114,23 @@ public class GameManagerScript : MonoBehaviour
         {
             instance = this;
         }
+        mistakeDisplayerTextComponent = mistakeText.GetComponent<TextMeshProUGUI>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
     {
-        mistakeTMP = mistakeText.GetComponent<TextMeshProUGUI>();
         for (int i = 0; i < keyCodes.Length; i++)
         {
             keyCodesOnScreeen.Add(keyCodes[i], false);
         }
-        audioSource = GetComponent<AudioSource>();
         timerElapsed = countdownAmt;
         for (int i = 1; i < lives; i++)
         {
             Instantiate(heartUI, heartUIParent);
         }
-        SoundManagerScript.UpdateAudioMixerGroupVolume(audioMixer, SaveSystemScript.LoadOption().soundEffectsVolume);
+        SoundManagerScript.UpdateAudioMixerGroupVolume(audioMixer, SoundManagerScript.soundEffectGroupName, SaveSystemScript.LoadOption().soundEffectsVolume);
+        SoundManagerScript.UpdateAudioMixerGroupVolume(audioMixer, SoundManagerScript.gameSoundGroupName, SaveSystemScript.LoadOption().gameSoundVolume);
     }
     void Update()
     {
@@ -122,7 +138,7 @@ public class GameManagerScript : MonoBehaviour
         {
             TogglePauseGame();
         }
-        if (!gameOver && !gamePaused)
+        if (!gameEnded && !gamePaused)
         {
             currentKeyCodeDetected = GetCurrentInputKeycode();
             timerElapsed -= Time.deltaTime;
@@ -135,7 +151,7 @@ public class GameManagerScript : MonoBehaviour
             {
                 if (keyCodesOnScreeen.TryGetValue(currentKeyCodeDetected, out isKeyCodeDetectedOnScreen) && !isKeyCodeDetectedOnScreen || !keyCodesOnScreeen.TryGetValue(currentKeyCodeDetected, out isKeyCodeDetectedOnScreen))
                 {
-                    RemoveHealth(wrongKeyMistakeText);
+                    instance.RemoveHealth(instance.wrongKeyMistakeText);
                 }
                 else if (keyCodesOnScreeen.TryGetValue(currentKeyCodeDetected, out isKeyCodeDetectedOnScreen) && isKeyCodeDetectedOnScreen)
                 {
@@ -147,6 +163,10 @@ public class GameManagerScript : MonoBehaviour
 
     private Transform GetRandomFallingElement(FallingElementPropability[] fallingElementPropabilitiesToSelect)
     {
+        if (fallingElementAndPropabilityOfGame.Length == 0)
+        {
+            return null;
+        }
         int totalLength = 0;
         for (int i = 0; i<fallingElementAndPropabilityOfGame.Length; i++)
         {
@@ -187,24 +207,41 @@ public class GameManagerScript : MonoBehaviour
     public void RemoveHealth(string reasonText)
     {
         mistakeText.SetActive(true);
-        mistakeTMP.text = reasonText;
-        lives --;
-        if (lives <= 0)
+        mistakeDisplayerTextComponent.text = reasonText;
+        if (lives > 0)
         {
-            EndGame();
-            lives = 0;
-        }
-        if (heartUIParent.childCount > 0)
-        {
+            lives--;
             Destroy(heartUIParent.GetChild(0).gameObject);
         }
+        if (lives <= 0)
+        {
+            UpdateStarsOfGame();
+            if (starsOfGame <= 0)
+            {
+                EndGame(gameOverSound, gameOverUI);
+            }
+            else if (starsOfGame > 0)
+            {
+                EndGame(gameEndedSound, levelCompleteUI);
+            }
+            lives = 0;
+        }
     }
-    private void EndGame()
+
+    private void UpdateStarsOfGame()
     {
-        SoundManagerScript.PlaySound(audioSource, gameOverSound);
-        gameOver = true;
-        gameOverUI.SetActive(true);
+        if (starsOfGame < starConditions.Length && starConditions[starsOfGame].CheckCondition(this))
+        {
+            starsOfGame = starConditions[starsOfGame].starsWhenTrue;
+        }
+    }
+
+    private void EndGame(Sound soundToPlay, GameObject uiToSetActive)
+    {
         OnDisableFallingElements();
+        SoundManagerScript.PlaySound(audioSource, soundToPlay);
+        gameEnded = true;
+        uiToSetActive.SetActive(true);
     }
     protected virtual void OnDisableFallingElements()
     {
@@ -232,20 +269,8 @@ public class GameManagerScript : MonoBehaviour
     }
     public void AddPoints()
     {
+        UpdateStarsOfGame();
         pointsOfGame += pointsPerLetterExplode;
         pointsUI.GetComponent<TextMeshProUGUI>().text = "Points: " + pointsOfGame;
-    }
-
-    public void SaveProgress()
-    {
-        if (SaveSystemScript.LoadProgress().bestScore <= pointsOfGame)
-        {
-            pointsToSave = pointsOfGame;
-        }
-        if (SaveSystemScript.LoadProgress().bestScore > pointsOfGame)
-        {
-            pointsToSave = SaveSystemScript.LoadProgress().bestScore;
-        }
-        SaveSystemScript.SaveProgress();
     }
 }

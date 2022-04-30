@@ -14,9 +14,5 @@ public class LevelsPanelEditor : Editor
         {
             levelsPanelScript.CreateNewLevel();
         }
-        if (GUILayout.Button("Delete Level"))
-        {
-            levelsPanelScript.DeleteLevelByName();
-        }
     }
 }

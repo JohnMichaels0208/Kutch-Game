@@ -18,7 +18,7 @@ public class FallingElementScript : FallingElementBase
 
     protected override void Collide()
     {
-        SoundManagerScript.PlaySound(GameManagerScript.instance.audioSource, GameManagerScript.instance.collideSound);
+        SoundManagerScript.PlaySound(base.audioSourceComponent, GameManagerScript.instance.collideSound);
         base.Collide();
     }
     protected override void OnTriggerEnter2D(Collider2D collision)
@@ -28,7 +28,7 @@ public class FallingElementScript : FallingElementBase
 
     protected override void CorrectKey()
     {
-        SoundManagerScript.PlaySound(GameManagerScript.instance.audioSource, GameManagerScript.instance.normalLetterCorrectKeySound);
+        SoundManagerScript.PlaySound(base.audioSourceComponent, GameManagerScript.instance.normalLetterCorrectKeySound);
         base.CorrectKey();
     }
 

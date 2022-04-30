@@ -1,5 +1,38 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!244 &-8326487339255041700
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: add0716c9ea46af4d8f97b1d1e87ef54
+  m_EffectName: Attenuation
+  m_MixLevel: eb2ba8d5344c8ec438dd552bb730384d
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!243 &-4271026211780886821
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Game Sounds
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: c172b85d3c40bfb4281498cf8ddd1118
+  m_Children: []
+  m_Volume: 65bcef36aa29ca945b0c81ace447ccfb
+  m_Pitch: e20d98c16baa6ff4baa77a519b7a8631
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -8326487339255041700}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!241 &24100000
 AudioMixerController:
   m_ObjectHideFlags: 0
@@ -16,6 +49,8 @@ AudioMixerController:
   m_EnableSuspend: 1
   m_UpdateMode: 0
   m_ExposedParameters:
+  - guid: 65bcef36aa29ca945b0c81ace447ccfb
+    name: Game Sound Volume
   - guid: d025f3663a7fc414fa9d36b33e3cf664
     name: Music Volume
   - guid: 91010bffeb27ecd419fba9db3ecd3b18
@@ -25,6 +60,7 @@ AudioMixerController:
     - 8179523e752a314468de33ee81db3550
     - 240c45c60ae904e479fe273b18cc3687
     - bbf66eeb0d0a75942b45a915fa44190d
+    - c172b85d3c40bfb4281498cf8ddd1118
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -40,6 +76,7 @@ AudioMixerGroupController:
   m_Children:
   - {fileID: 8976543745453949320}
   - {fileID: 3184708006721775905}
+  - {fileID: -4271026211780886821}
   m_Volume: c4a9fbf624fb9be41b05b5233b0075e5
   m_Pitch: 3c9d32d2e11dcc54da2133d0a40d16dd
   m_Send: 00000000000000000000000000000000
@@ -113,7 +150,7 @@ AudioMixerGroupController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Sound Effects
+  m_Name: SFX
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: bbf66eeb0d0a75942b45a915fa44190d
   m_Children: []

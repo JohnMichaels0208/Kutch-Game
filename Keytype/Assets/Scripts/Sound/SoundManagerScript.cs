@@ -3,8 +3,9 @@ using UnityEngine.Audio;
 
 public class SoundManagerScript : MonoBehaviour
 {
-    private const string soundEffectGroupName = "Sound Effects Volume";
-    private const string musicGroupName = "Music Volume";
+    public const string soundEffectGroupName = "Sound Effects Volume";
+    public const string musicGroupName = "Music Volume";
+    public const string gameSoundGroupName = "Game Sound Volume";
 
     public static void PlaySound(AudioSource audioSource, Sound soundToPlay)
     {
@@ -17,8 +18,14 @@ public class SoundManagerScript : MonoBehaviour
         audioSource.Play();
     }
 
-    public static void UpdateAudioMixerGroupVolume(AudioMixer audioMixer, float volume)
+    public static void UpdateAudioMixerGroupVolume(AudioMixer audioMixer, string audioGroupName, float volume)
     {
-        audioMixer.SetFloat(soundEffectGroupName, Mathf.Log10(volume)*20);
+        audioMixer.SetFloat(audioGroupName, volume);
+    }
+
+
+    public static float SliderValueToAudioMixerGroupValue(float sliderValue)
+    {
+        return Mathf.Log10(sliderValue) * 20;
     }
 }

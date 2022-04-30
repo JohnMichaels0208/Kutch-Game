@@ -37,6 +37,7 @@ public class FallingElementBase : MonoBehaviour
     {
         accelerationAmount += Time.deltaTime * GameManagerScript.instance.accelerationSpeed;
         transform.Translate(Vector3.down * Time.deltaTime * Mathf.Lerp(0, fallingSpeed, accelerationAmount));
+        GameManagerScript.instance.keyCodesOnScreeen[associatedKeyCode] = true;
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)

@@ -23,5 +23,9 @@ public class EndGamePointsScript : MonoBehaviour
         {
             tmpComponent.text = "Points: " + GameManagerScript.instance.pointsOfGame;
         }
+        else if (GameManagerScript.instance.pointsOfGame == 0)
+        {
+            tmpComponent.text = "Points: 0";
+        }
     }
 }

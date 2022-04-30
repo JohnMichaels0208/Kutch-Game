@@ -8,11 +8,18 @@ public class LevelData
     public string levelDescription;
     public string levelSceneName;
     public GameObject associatedButton;
-    public LevelData(string levelName, string levelDescription, GameObject buttonGameObject, string sceneName)
+    public int stars;
+    public float levelPointsForOneStar;
+    public float bestPoints;
+
+    public LevelData(string name, string description, GameObject buttonGameObject, string sceneName, float pointsForOneStar)
     {
-        this.associatedButton = buttonGameObject;
-        this.levelName = levelName;
-        this.levelDescription = levelDescription;
-        this.levelSceneName = sceneName;
+        this.levelPointsForOneStar = pointsForOneStar;
+        bestPoints = 0;
+        stars = 0;
+        associatedButton = buttonGameObject;
+        levelName = name;
+        levelDescription = description;
+        levelSceneName = sceneName;
     }
 }
