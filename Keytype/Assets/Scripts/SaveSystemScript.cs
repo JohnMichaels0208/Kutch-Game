@@ -70,6 +70,19 @@ public static class SaveSystemScript
         return 0;
     }
 
+    public static int LoadLevelIndexBySceneName(string sceneName)
+    {
+        List<LevelData> levelDatas = LoadLevelList();
+        for (int i = 0; i < levelDatas.Count; i++)
+        {
+            if (levelDatas[i].levelSceneName == sceneName)
+            {
+                return i;
+            }
+        }
+        return 0;
+    }
+
     public static void SaveLevelData(int index, LevelData data)
     {
         string json;
@@ -85,7 +98,7 @@ public static class SaveSystemScript
         File.WriteAllText(path, json);
     }
 
-    public static void SaveLevelProgress(int index, float bestPoints, int stars)
+    public static void SaveLevelProgress(int index, float points, int stars)
     {
         string json;
         string path = Application.persistentDataPath + levelSaveFileName;
@@ -94,8 +107,8 @@ public static class SaveSystemScript
             CreateLevel();
         }
         List<LevelData> levelDatas = LoadLevelList();
-        levelDatas[index].bestPoints = bestPoints;
-        levelDatas[index].stars = stars;
+        if (points > levelDatas[index].bestPoints) levelDatas[index].bestPoints = points;
+        if (stars > levelDatas[index].stars) levelDatas[index].stars = stars;
         LevelSaveClass level = new LevelSaveClass(levelDatas);
         json = JsonUtility.ToJson(level);
         File.WriteAllText(path, json);

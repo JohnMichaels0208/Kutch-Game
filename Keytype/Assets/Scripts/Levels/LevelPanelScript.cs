@@ -14,22 +14,11 @@ public class LevelPanelScript : MonoBehaviour
 
     public void CreateNewLevel()
     {
-        LevelData levelData = new LevelData(levelName, levelDescription, instantiatedLevelButton, levelSceneName, levelPointsForOneStar);
         instantiatedLevelButton = Instantiate(levelButtonToInstantiate, transform);
-        SyncLevelDataWithUI(levelData, instantiatedLevelButton);
+        LevelData levelData = new LevelData(levelName, levelDescription, instantiatedLevelButton, levelSceneName, levelPointsForOneStar);
+        LevelButtonScript instantiatedLevelButtonScript = instantiatedLevelButton.GetComponent<LevelButtonScript>();
+        instantiatedLevelButtonScript.SyncLevelDataToButton(levelData);
+        instantiatedLevelButtonScript.levelDataDisplayer = levelDataDisplayerGO;
         SaveSystemScript.AddLevelData(levelData);
-    }
-
-    public void SyncLevelDataWithUI(LevelData data, GameObject levelButtonGO)
-    {
-        //setting game object name
-        levelButtonGO.name = levelName;
-        //setting ui text name
-        levelButtonGO.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().text = data.levelName;
-        //setting properties
-        LevelButtonScript levelButtonScriptComponent = levelButtonGO.GetComponent<LevelButtonScript>();
-        levelButtonScriptComponent.levelDataDisplayer = levelDataDisplayerGO;
-        levelButtonScriptComponent.associatedLevelData = data;
-        levelButtonScriptComponent.SyncLevelToSaveProperties(data);
     }
 }

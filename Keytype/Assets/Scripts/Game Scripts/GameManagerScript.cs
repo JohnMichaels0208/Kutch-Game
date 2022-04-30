@@ -58,7 +58,9 @@ public class GameManagerScript : MonoBehaviour
     private const float maxSpawnXPosition = -7.8f;
 
     //Fall speed of the falling elements
-    public float averageFallspeed = 2;
+    public float currentFallspeed;
+    public float normalFallspeed = 2;
+    public float timerFallSpeed = 0.2f;
     public float fallSpeedDifference = 1f;
 
     //Countdown Variables
@@ -86,12 +88,18 @@ public class GameManagerScript : MonoBehaviour
     public delegate void KeyDownEventHandler(object sender, System.EventArgs eventArgs, KeyCode keyCodeDetected);
     public event KeyDownEventHandler keyDownEvent;
 
+    public delegate void TimerEventHandler(object sender, System.EventArgs eventArgs);
+    public event TimerEventHandler timerEvent;
+
     //acceleration speed when falling element spawned
-    public readonly float accelerationSpeed = 2f;
+    public readonly float accelerationSpeed = 0.5f;
     [HideInInspector] public int lives = 1;
 
     public float pointsForOneStar;
     public int starsOfGame { get; private set; } = 0;
+
+    private LevelData associatedLevelData;
+    private int associatedLevelDataindex;
 
     private OneStarCondition oneStarCondition = new OneStarCondition();
     private TwoStarCondition twoStarCondition = new TwoStarCondition();
@@ -101,10 +109,10 @@ public class GameManagerScript : MonoBehaviour
 
     //game data
     public float pointsOfGame { get; private set; } = 0;
-    [HideInInspector] public float pointsToSave;
 
     private void Awake()
     {
+        currentFallspeed = normalFallspeed;
         starConditions = new StarBaseCondition[3] {oneStarCondition, twoStarCondition, threeStarCondition};
         if (instance != null && instance != this)
         {
@@ -116,10 +124,15 @@ public class GameManagerScript : MonoBehaviour
         }
         mistakeDisplayerTextComponent = mistakeText.GetComponent<TextMeshProUGUI>();
         audioSource = GetComponent<AudioSource>();
+        List<LevelData> levelDatas = SaveSystemScript.LoadLevelList();
+        associatedLevelDataindex = SaveSystemScript.LoadLevelIndexBySceneName(SceneManager.GetActiveScene().name);
+        associatedLevelData = levelDatas[associatedLevelDataindex];
     }
 
     private void Start()
     {
+        pointsForOneStar = associatedLevelData.levelPointsForOneStar;
+
         for (int i = 0; i < keyCodes.Length; i++)
         {
             keyCodesOnScreeen.Add(keyCodes[i], false);
@@ -191,16 +204,13 @@ public class GameManagerScript : MonoBehaviour
 
     private void SpawnLetter(Transform transformToInstantiate)
     {
-        Instantiate(transformToInstantiate, new Vector3(Random.Range(minSpawnXPosition, maxSpawnXPosition), spawnYPosition, 0), Quaternion.identity);
+        Instantiate(transformToInstantiate, new Vector3(Random.Range(minSpawnXPosition, maxSpawnXPosition), spawnYPosition, 0), Quaternion.identity, transform);
     }
     private KeyCode GetCurrentInputKeycode()
     {
         foreach (KeyCode kcode in System.Enum.GetValues(typeof(KeyCode)))
         {
-            if (Input.GetKeyDown(kcode) && !exceptionKeyCodes.Contains(kcode))
-            {
-                return kcode;
-            }
+            if (Input.GetKeyDown(kcode) && !exceptionKeyCodes.Contains(kcode)) return kcode;
         }
         return KeyCode.None;
     }
@@ -216,28 +226,20 @@ public class GameManagerScript : MonoBehaviour
         if (lives <= 0)
         {
             UpdateStarsOfGame();
-            if (starsOfGame <= 0)
-            {
-                EndGame(gameOverSound, gameOverUI);
-            }
-            else if (starsOfGame > 0)
-            {
-                EndGame(gameEndedSound, levelCompleteUI);
-            }
+            if (starsOfGame <= 0) EndGame(gameOverSound, gameOverUI);
+            else if (starsOfGame > 0) EndGame(gameEndedSound, levelCompleteUI);
             lives = 0;
         }
     }
 
     private void UpdateStarsOfGame()
     {
-        if (starsOfGame < starConditions.Length && starConditions[starsOfGame].CheckCondition(this))
-        {
-            starsOfGame = starConditions[starsOfGame].starsWhenTrue;
-        }
+        if (starsOfGame < starConditions.Length && starConditions[starsOfGame].CheckCondition(this)) starsOfGame = starConditions[starsOfGame].starsWhenTrue;
     }
 
     private void EndGame(Sound soundToPlay, GameObject uiToSetActive)
     {
+        SaveSystemScript.SaveLevelProgress(associatedLevelDataindex, pointsOfGame, starsOfGame);
         OnDisableFallingElements();
         SoundManagerScript.PlaySound(audioSource, soundToPlay);
         gameEnded = true;
@@ -245,17 +247,12 @@ public class GameManagerScript : MonoBehaviour
     }
     protected virtual void OnDisableFallingElements()
     {
-        if (pauseGameEvent != null)
-        {
-            pauseGameEvent.Invoke(this, System.EventArgs.Empty);
-        }
+        pauseGameEvent?.Invoke(this, System.EventArgs.Empty);
+            
     }
     protected virtual void OnKeyDown(KeyCode keyCodeEventData)
     {
-        if (keyDownEvent != null)
-        {
-            keyDownEvent.Invoke(this, System.EventArgs.Empty, keyCodeEventData);
-        }
+        if (keyDownEvent != null) keyDownEvent.Invoke(this, System.EventArgs.Empty, keyCodeEventData);
     }
     public void TogglePauseGame()
     {
@@ -272,5 +269,10 @@ public class GameManagerScript : MonoBehaviour
         UpdateStarsOfGame();
         pointsOfGame += pointsPerLetterExplode;
         pointsUI.GetComponent<TextMeshProUGUI>().text = "Points: " + pointsOfGame;
+    }
+
+    public virtual void OnTimer()
+    {
+        timerEvent?.Invoke(this, System.EventArgs.Empty);
     }
 }

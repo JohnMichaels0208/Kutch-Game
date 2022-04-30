@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class LevelButtonScript : MonoBehaviour
 {
@@ -13,11 +14,13 @@ public class LevelButtonScript : MonoBehaviour
     private void OnEnable()
     {
         GetComponent<ButtonLoadLevelScript>().targetSceneName = associatedLevelData.levelSceneName;
+        //associatedLevelData = SaveSystemScript.LoadLevelList()[SaveSystemScript.LoadLevelIndexByGO(gameObject)];
+        SyncLevelDataToButton(associatedLevelData);
     }
 
     public void SetCurrentActiveLevelData()
     {
-        levelDataDisplayer.GetComponent<LevelDataDisplayerScript>().UpdateCurrentActiveLevel(associatedLevelData);
+        levelDataDisplayer.GetComponent<LevelDataDisplayerScript>().UpdateLevelDataDisplayText(associatedLevelData);
     }
 
     public void SaveLevel()
@@ -32,11 +35,22 @@ public class LevelButtonScript : MonoBehaviour
         DestroyImmediate(gameObject);
     }
 
-    public void SyncLevelToSaveProperties(LevelData data)
+    public void SyncDataWithLevelToSaveProperties(LevelData data)
     {
         levelToSaveName = data.levelName;
         levelToSaveSceneName = data.levelSceneName;
         levelToSavePointsForOneStar = data.levelPointsForOneStar;
         levelToSaveDescription = data.levelDescription;
+    }
+
+    public void SyncLevelDataToButton(LevelData data)
+    {
+        //setting game object name
+        gameObject.name = data.levelName;
+        //setting ui text name
+        transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().text = data.levelName;
+        //setting properties
+        associatedLevelData = data;
+        SyncDataWithLevelToSaveProperties(data);
     }
 }
