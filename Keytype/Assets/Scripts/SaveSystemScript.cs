@@ -59,17 +59,17 @@ public static class SaveSystemScript
         return levelDataList;
     }
 
-    public static int LoadLevelIndexByGO(GameObject button)
+    public static int LoadLevelIndexByButtonName(string buttonName)
     {
         List<LevelData> levelDatas = LoadLevelDataList();
         for (int i = 0; i < levelDatas.Count; i++)
         {
-            if (ReferenceEquals(levelDatas[i].associatedButton, button))
+            if (levelDatas[i].associatedButtonName == buttonName)
             {
                 return i;
             }
         }
-        return 1;
+        return 0;
     }
 
     public static int LoadLevelIndexBySceneName(string sceneName)

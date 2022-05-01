@@ -8,7 +8,7 @@ public class ThreeStarCondition : StarBaseCondition
     public override bool CheckCondition(object dataParam)
     {
         base.CheckCondition(dataParam);
-        if (gameManager.lives == 3)
+        if (gameManager.lives == 3 && gameManager.pointsOfGame >= gameManager.pointsForOneStar * 2)
         {
             return true;
         }

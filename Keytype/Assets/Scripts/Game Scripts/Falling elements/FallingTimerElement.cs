@@ -25,20 +25,22 @@ public class FallingTimerElement : FallingElementBase
 
     protected override void CorrectKey()
     {
-        GameManagerScript.instance.currentFallspeed = GameManagerScript.instance.timerFallSpeed;
-        GameManagerScript.instance.OnTimer();
+        GameManagerScript.instance.InvokeSpeedChangedEvent(GameManagerScript.instance.timerFallSpeed);
         base.CorrectKey();
     }
 
     protected override void Collide()
     {
         base.Collide();
-        GameManagerScript.instance.currentFallspeed = GameManagerScript.instance.normalFallspeed;
     }
 
     protected override void TouchedByBombBlast()
     {
-        base.TouchedByBombBlast();
-        GameManagerScript.instance.currentFallspeed = GameManagerScript.instance.normalFallspeed;
+    }
+
+    public override void OnFXAnimationEnd()
+    {
+        GameManagerScript.instance.InvokeSpeedChangedEvent(GameManagerScript.instance.normalFallspeed);
+        base.OnFXAnimationEnd();
     }
 }

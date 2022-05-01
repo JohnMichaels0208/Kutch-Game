@@ -14,26 +14,24 @@ public class LevelButtonScript : MonoBehaviour
     private void OnEnable()
     {
         GetComponent<ButtonLoadLevelScript>().targetSceneName = associatedLevelData.levelSceneName;
-        associatedLevelData = SaveSystemScript.LoadLevelDataList()[SaveSystemScript.LoadLevelIndexByGO(gameObject)];
-        Debug.Log(SaveSystemScript.LoadLevelIndexByGO(gameObject));
+        associatedLevelData = SaveSystemScript.LoadLevelDataList()[SaveSystemScript.LoadLevelIndexByButtonName(gameObject.name)];
         SyncLevelDataToButton(associatedLevelData);
     }
 
     public void SetCurrentActiveLevelData()
     {
-        Debug.Log(associatedLevelData.levelName);
         levelDataDisplayer.GetComponent<LevelDataDisplayerScript>().UpdateLevelDataDisplayText(associatedLevelData);
     }
 
     public void SaveLevel()
     {
-        LevelData levelData = new LevelData(levelToSaveName, levelToSaveDescription, gameObject, levelToSaveSceneName, levelToSavePointsForOneStar);
-        SaveSystemScript.SaveLevelData(SaveSystemScript.LoadLevelIndexByGO(gameObject), levelData);
+        LevelData levelData = new LevelData(levelToSaveName, levelToSaveDescription, gameObject.name, levelToSaveSceneName, levelToSavePointsForOneStar);
+        SaveSystemScript.SaveLevelData(SaveSystemScript.LoadLevelIndexByButtonName(gameObject.name), levelData);
     }
 
     public void DeleteLevel()
     {
-        SaveSystemScript.DeleteLevelData(SaveSystemScript.LoadLevelIndexByGO(gameObject));
+        SaveSystemScript.DeleteLevelData(SaveSystemScript.LoadLevelIndexByButtonName(gameObject.name));
         DestroyImmediate(gameObject);
     }
 

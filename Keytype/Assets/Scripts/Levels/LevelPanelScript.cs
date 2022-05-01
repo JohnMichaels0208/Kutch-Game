@@ -1,9 +1,6 @@
 using UnityEngine;
-using TMPro;
-
 public class LevelPanelScript : MonoBehaviour
 {
-    private GameObject instantiatedLevelButton;
     [SerializeField] private GameObject levelDataDisplayerGO;
     [SerializeField] private GameObject levelButtonToInstantiate;
     [Header("Level to create data")]
@@ -14,10 +11,11 @@ public class LevelPanelScript : MonoBehaviour
 
     public void CreateNewLevel()
     {
-        instantiatedLevelButton = Instantiate(levelButtonToInstantiate, transform);
+        GameObject instantiatedLevelButton = Instantiate(levelButtonToInstantiate, transform);
         LevelButtonScript instantiatedLevelButtonScript = instantiatedLevelButton.GetComponent<LevelButtonScript>();
-        LevelData levelData = new LevelData(levelName, levelDescription, instantiatedLevelButton, levelSceneName, levelPointsForOneStar);
+        LevelData levelData = new LevelData(levelName, levelDescription, instantiatedLevelButton.name, levelSceneName, levelPointsForOneStar);
         instantiatedLevelButtonScript.SyncLevelDataToButton(levelData);
+        levelData.associatedButtonName = instantiatedLevelButton.name;
         instantiatedLevelButtonScript.levelDataDisplayer = levelDataDisplayerGO;
         SaveSystemScript.AddLevelData(levelData);
     }

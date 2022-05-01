@@ -211,15 +211,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3749037638170835882, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
       propertyPath: fallingElementAndPropabilityOfGame.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3749037638170835882, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
       propertyPath: fallingElementAndPropabilityOfGame.Array.data[0].propablility
-      value: 50
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3749037638170835882, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
       propertyPath: fallingElementAndPropabilityOfGame.Array.data[1].propablility
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3749037638170835882, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
       propertyPath: fallingElementAndPropabilityOfGame.Array.data[2].propablility

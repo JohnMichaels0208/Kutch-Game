@@ -8,7 +8,7 @@ public class TwoStarCondition : StarBaseCondition
     public override bool CheckCondition(object dataParam)
     {
         base.CheckCondition(dataParam);
-        if (gameManager.pointsOfGame >= gameManager.pointsForOneStar * 1.25f)
+        if (gameManager.pointsOfGame >= gameManager.pointsForOneStar * 1.5f)
         {
             return true;
         }

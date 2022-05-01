@@ -88,8 +88,8 @@ public class GameManagerScript : MonoBehaviour
     public delegate void KeyDownEventHandler(object sender, System.EventArgs eventArgs, KeyCode keyCodeDetected);
     public event KeyDownEventHandler keyDownEvent;
 
-    public delegate void TimerEventHandler(object sender, System.EventArgs eventArgs);
-    public event TimerEventHandler timerEvent;
+    public delegate void SpeedChangedEventHandler(object sender, System.EventArgs eventArgs);
+    public event SpeedChangedEventHandler speedChangedEvent;
 
     //acceleration speed when falling element spawned
     public readonly float accelerationSpeed = 0.5f;
@@ -216,6 +216,7 @@ public class GameManagerScript : MonoBehaviour
     }
     public void RemoveHealth(string reasonText)
     {
+        return;
         mistakeText.SetActive(true);
         mistakeDisplayerTextComponent.text = reasonText;
         if (lives > 0)
@@ -271,8 +272,8 @@ public class GameManagerScript : MonoBehaviour
         pointsUI.GetComponent<TextMeshProUGUI>().text = "Points: " + pointsOfGame;
     }
 
-    public virtual void OnTimer()
+    public virtual void InvokeSpeedChangedEvent(float targetSpeed)
     {
-        timerEvent?.Invoke(this, System.EventArgs.Empty);
+        speedChangedEvent?.Invoke(this, System.EventArgs.Empty);
     }
 }

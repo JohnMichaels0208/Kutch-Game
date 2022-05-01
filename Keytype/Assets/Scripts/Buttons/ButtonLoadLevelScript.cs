@@ -5,19 +5,16 @@ using System.Collections.Generic;
 public class ButtonLoadLevelScript : MonoBehaviour
 {
     public string targetSceneName;
+    public virtual string sceneToLoad { get { return targetSceneName; } }
     
-    public void LoadLevel()
+    public virtual void LoadLevel()
     {
         List<LevelData> levelDatas = SaveSystemScript.LoadLevelDataList();
-        for (int i = 0; i < levelDatas.Count; i++)
+        if (sceneToLoad.Length > 0)
         {
-            Debug.Log(levelDatas[i].associatedButton);
-        }
-        if (targetSceneName.Length > 0)
-        {
-            if (CheckSceneExists(targetSceneName))
+            if (CheckSceneExists(sceneToLoad))
             {
-                SceneManager.LoadScene(targetSceneName);
+                SceneManager.LoadScene(sceneToLoad);
             }
         }
     }
