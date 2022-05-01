@@ -203,7 +203,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3749037638170835882, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
       propertyPath: normalFallspeed
-      value: 1.5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3749037638170835882, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
       propertyPath: fallSpeedDifference
@@ -215,11 +215,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3749037638170835882, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
       propertyPath: fallingElementAndPropabilityOfGame.Array.data[0].propablility
-      value: 30
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 3749037638170835882, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
       propertyPath: fallingElementAndPropabilityOfGame.Array.data[1].propablility
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3749037638170835882, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
       propertyPath: fallingElementAndPropabilityOfGame.Array.data[2].propablility
@@ -300,6 +300,10 @@ PrefabInstance:
     - target: {fileID: 5851276484624956517, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5851276486043614831, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5851276486063291561, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
       propertyPath: m_SizeDelta.x

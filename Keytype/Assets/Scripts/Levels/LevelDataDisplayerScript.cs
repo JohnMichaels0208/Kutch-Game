@@ -12,6 +12,7 @@ public class LevelDataDisplayerScript : MonoBehaviour
 
     public void UpdateLevelDataDisplayText(LevelData levelData)
     {
+        Debug.Log(levelData.levelName);
         levelDataDescriptionTMP = levelDataDescriptionGO.GetComponent<TextMeshProUGUI>();
         levelDataDescriptionTMP.text = levelData.levelDescription + "\n" + "Stars: " + levelData.stars.ToString() + "\n" + "Best points:" + levelData.bestPoints.ToString();
 

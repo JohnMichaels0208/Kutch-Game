@@ -483,13 +483,13 @@ GameObject:
   m_Component:
   - component: {fileID: 8504696958693393277}
   - component: {fileID: 91425211531250183}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Explode Collider
   m_TagString: Explosion
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8504696958693393277
 Transform:
   m_ObjectHideFlags: 0

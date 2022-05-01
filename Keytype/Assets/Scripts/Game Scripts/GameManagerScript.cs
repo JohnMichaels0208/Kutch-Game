@@ -124,7 +124,7 @@ public class GameManagerScript : MonoBehaviour
         }
         mistakeDisplayerTextComponent = mistakeText.GetComponent<TextMeshProUGUI>();
         audioSource = GetComponent<AudioSource>();
-        List<LevelData> levelDatas = SaveSystemScript.LoadLevelList();
+        List<LevelData> levelDatas = SaveSystemScript.LoadLevelDataList();
         associatedLevelDataindex = SaveSystemScript.LoadLevelIndexBySceneName(SceneManager.GetActiveScene().name);
         associatedLevelData = levelDatas[associatedLevelDataindex];
     }

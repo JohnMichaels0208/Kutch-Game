@@ -15,8 +15,8 @@ public class LevelPanelScript : MonoBehaviour
     public void CreateNewLevel()
     {
         instantiatedLevelButton = Instantiate(levelButtonToInstantiate, transform);
-        LevelData levelData = new LevelData(levelName, levelDescription, instantiatedLevelButton, levelSceneName, levelPointsForOneStar);
         LevelButtonScript instantiatedLevelButtonScript = instantiatedLevelButton.GetComponent<LevelButtonScript>();
+        LevelData levelData = new LevelData(levelName, levelDescription, instantiatedLevelButton, levelSceneName, levelPointsForOneStar);
         instantiatedLevelButtonScript.SyncLevelDataToButton(levelData);
         instantiatedLevelButtonScript.levelDataDisplayer = levelDataDisplayerGO;
         SaveSystemScript.AddLevelData(levelData);

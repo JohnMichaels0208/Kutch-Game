@@ -14,12 +14,14 @@ public class LevelButtonScript : MonoBehaviour
     private void OnEnable()
     {
         GetComponent<ButtonLoadLevelScript>().targetSceneName = associatedLevelData.levelSceneName;
-        //associatedLevelData = SaveSystemScript.LoadLevelList()[SaveSystemScript.LoadLevelIndexByGO(gameObject)];
+        associatedLevelData = SaveSystemScript.LoadLevelDataList()[SaveSystemScript.LoadLevelIndexByGO(gameObject)];
+        Debug.Log(SaveSystemScript.LoadLevelIndexByGO(gameObject));
         SyncLevelDataToButton(associatedLevelData);
     }
 
     public void SetCurrentActiveLevelData()
     {
+        Debug.Log(associatedLevelData.levelName);
         levelDataDisplayer.GetComponent<LevelDataDisplayerScript>().UpdateLevelDataDisplayText(associatedLevelData);
     }
 

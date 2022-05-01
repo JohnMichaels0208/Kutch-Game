@@ -45,7 +45,9 @@ public static class SaveSystemScript
         File.WriteAllText(path, json);
     }
 
-    public static List<LevelData> LoadLevelList()
+
+
+    public static List<LevelData> LoadLevelDataList()
     {
         string path = Application.persistentDataPath + levelSaveFileName;
         if (!File.Exists(path))
@@ -59,7 +61,7 @@ public static class SaveSystemScript
 
     public static int LoadLevelIndexByGO(GameObject button)
     {
-        List<LevelData> levelDatas = LoadLevelList();
+        List<LevelData> levelDatas = LoadLevelDataList();
         for (int i = 0; i < levelDatas.Count; i++)
         {
             if (ReferenceEquals(levelDatas[i].associatedButton, button))
@@ -67,12 +69,12 @@ public static class SaveSystemScript
                 return i;
             }
         }
-        return 0;
+        return 1;
     }
 
     public static int LoadLevelIndexBySceneName(string sceneName)
     {
-        List<LevelData> levelDatas = LoadLevelList();
+        List<LevelData> levelDatas = LoadLevelDataList();
         for (int i = 0; i < levelDatas.Count; i++)
         {
             if (levelDatas[i].levelSceneName == sceneName)
@@ -91,7 +93,7 @@ public static class SaveSystemScript
         {
             CreateLevel();
         }
-        List<LevelData> levelDatas = LoadLevelList();
+        List<LevelData> levelDatas = LoadLevelDataList();
         levelDatas[index] = data;
         LevelSaveClass level = new LevelSaveClass(levelDatas);
         json = JsonUtility.ToJson(level);
@@ -106,7 +108,7 @@ public static class SaveSystemScript
         {
             CreateLevel();
         }
-        List<LevelData> levelDatas = LoadLevelList();
+        List<LevelData> levelDatas = LoadLevelDataList();
         if (points > levelDatas[index].bestPoints) levelDatas[index].bestPoints = points;
         if (stars > levelDatas[index].stars) levelDatas[index].stars = stars;
         LevelSaveClass level = new LevelSaveClass(levelDatas);
@@ -122,7 +124,7 @@ public static class SaveSystemScript
         {
             CreateLevel();
         }
-        List<LevelData> levelDatas = LoadLevelList();
+        List<LevelData> levelDatas = LoadLevelDataList();
         levelDatas.Add(levelData);
         LevelSaveClass level = new LevelSaveClass(levelDatas);
         json = JsonUtility.ToJson(level);
@@ -132,7 +134,7 @@ public static class SaveSystemScript
     public static void DeleteLevelData(int index)
     {
         string path = Application.persistentDataPath + levelSaveFileName;
-        List<LevelData> levels = LoadLevelList();
+        List<LevelData> levels = LoadLevelDataList();
         levels.RemoveAt(index);
         string json = JsonUtility.ToJson(new LevelSaveClass(levels));
         File.WriteAllText(path, json);

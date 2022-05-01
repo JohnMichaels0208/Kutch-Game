@@ -134,6 +134,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 3749037638170835882, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
+      propertyPath: normalFallspeed
+      value: 1.6
+      objectReference: {fileID: 0}
     - target: {fileID: 3749037638170835883, guid: f66e3bef89c21d44d84f97bd128effd6, type: 3}
       propertyPath: m_RootOrder
       value: 0

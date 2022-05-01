@@ -1,11 +1,18 @@
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class ButtonLoadLevelScript : MonoBehaviour
 {
     public string targetSceneName;
+    
     public void LoadLevel()
     {
+        List<LevelData> levelDatas = SaveSystemScript.LoadLevelDataList();
+        for (int i = 0; i < levelDatas.Count; i++)
+        {
+            Debug.Log(levelDatas[i].associatedButton);
+        }
         if (targetSceneName.Length > 0)
         {
             if (CheckSceneExists(targetSceneName))
