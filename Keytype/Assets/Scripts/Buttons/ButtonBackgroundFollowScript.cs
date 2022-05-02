@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class ButtonBackgroundFollowScript : MonoBehaviour
@@ -17,6 +16,7 @@ public class ButtonBackgroundFollowScript : MonoBehaviour
 
     public void ButtonPointerEnter(RectTransform targetRectTransform)
     {
+        Debug.Log("button pointer enter");
         targetPosition = targetRectTransform.position;
     }
 
@@ -27,6 +27,7 @@ public class ButtonBackgroundFollowScript : MonoBehaviour
 
     public void PointerExit()
     {
+        Debug.Log("pointer exit");
         background.color *= new Color(1, 1, 1, 0);
     }
 

@@ -3,6 +3,8 @@ using TMPro;
 
 public class LevelButtonScript : MonoBehaviour
 {
+    [SerializeField] private GameObject unlockedButton, lockedButton;
+    [SerializeField] private GameObject levelNameGO;
     [HideInInspector] public LevelData associatedLevelData;
     public GameObject levelDataDisplayer;
     [Header("Level to save data")]
@@ -10,12 +12,27 @@ public class LevelButtonScript : MonoBehaviour
     public string levelToSaveSceneName;
     public float levelToSavePointsForOneStar;
     [TextArea] public string levelToSaveDescription;
-
     private void OnEnable()
     {
         GetComponent<ButtonLoadLevelScript>().targetSceneName = associatedLevelData.levelSceneName;
+    }
+
+    private void Start()
+    {
         associatedLevelData = SaveSystemScript.LoadLevelDataList()[SaveSystemScript.LoadLevelIndexByButtonName(gameObject.name)];
         SyncLevelDataToButton(associatedLevelData);
+        switch (associatedLevelData.isUnlocked)
+        {
+            case false:
+                lockedButton.SetActive(true);
+                break;
+
+            case true:
+                unlockedButton.SetActive(true);
+                break;
+        }
+
+
     }
 
     public void SetCurrentActiveLevelData()
@@ -48,7 +65,7 @@ public class LevelButtonScript : MonoBehaviour
         //setting game object name
         gameObject.name = data.levelName;
         //setting ui text name
-        transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().text = data.levelName;
+        levelNameGO.GetComponent<TextMeshProUGUI>().text = data.levelName;
         //setting properties
         associatedLevelData = data;
         SyncDataWithLevelToSaveProperties(data);

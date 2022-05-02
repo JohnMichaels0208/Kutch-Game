@@ -216,7 +216,6 @@ public class GameManagerScript : MonoBehaviour
     }
     public void RemoveHealth(string reasonText)
     {
-        return;
         mistakeText.SetActive(true);
         mistakeDisplayerTextComponent.text = reasonText;
         if (lives > 0)

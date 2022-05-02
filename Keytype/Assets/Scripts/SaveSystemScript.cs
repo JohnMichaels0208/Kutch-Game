@@ -100,6 +100,19 @@ public static class SaveSystemScript
         File.WriteAllText(path, json);
     }
 
+    public static void SaveLevelDataList(List<LevelData> levelDatas)
+    {
+        string json;
+        string path = Application.persistentDataPath + levelSaveFileName;
+        if (!File.Exists(path))
+        {
+            CreateLevel();
+        }
+        LevelSaveClass level = new LevelSaveClass(levelDatas);
+        json = JsonUtility.ToJson(level);
+        File.WriteAllText(path, json);
+    }
+
     public static void SaveLevelProgress(int index, float points, int stars)
     {
         string json;

@@ -4,6 +4,7 @@ using UnityEngine;
 [Serializable]
 public class LevelData
 {
+    public bool isUnlocked;
     public string levelName;
     public string levelDescription;
     public string levelSceneName;
@@ -14,6 +15,7 @@ public class LevelData
 
     public LevelData(string name, string description, string associatedButtonName, string sceneName, float pointsForOneStar)
     {
+        isUnlocked = true;
         this.levelPointsForOneStar = pointsForOneStar;
         bestPoints = 0;
         stars = 0;

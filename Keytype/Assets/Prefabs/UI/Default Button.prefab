@@ -75,8 +75,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4282203453
+  m_fontColor: {r: 0.23921569, g: 0.23921569, b: 0.23921569, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -235,11 +235,11 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.32941177, g: 0.42745098, b: 0.8980392, a: 1}
-    m_HighlightedColor: {r: 0.88235295, g: 0.37254903, b: 0.25490198, a: 1}
-    m_PressedColor: {r: 0.88235295, g: 0.37254903, b: 0.25490198, a: 1}
-    m_SelectedColor: {r: 0.32941177, g: 0.42745098, b: 0.8980392, a: 1}
-    m_DisabledColor: {r: 0.32941177, g: 0.42745098, b: 0.8980392, a: 1}
+    m_NormalColor: {r: 0.09019608, g: 0.7529412, b: 0.92156863, a: 1}
+    m_HighlightedColor: {r: 0.49411765, g: 1, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.19607843, g: 1, b: 0.49411765, a: 1}
+    m_SelectedColor: {r: 0.09019608, g: 0.7529412, b: 0.92156863, a: 1}
+    m_DisabledColor: {r: 0.09019608, g: 0.7529412, b: 0.92156863, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.2
   m_SpriteState:
@@ -260,7 +260,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 5103289150807433800}
         m_TargetAssemblyTypeName: ButtonLoadLevelScript, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: LoadLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

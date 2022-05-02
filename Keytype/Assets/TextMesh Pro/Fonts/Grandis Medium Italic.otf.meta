@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: c54e5f9f1376ea34a832dd0da38a6cdb
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Grandis
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 1549cd1f357dda14885c7baaa85a4fa8, type: 3}
+  - {fileID: 12800000, guid: 14f5f22a5dca4fb44b771b0a13fffa35, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

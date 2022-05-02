@@ -1,6 +1,9 @@
 using UnityEngine;
+using System.Collections.Generic;
 public class LevelPanelScript : MonoBehaviour
 {
+    private List<LevelData> levelDatas;
+
     [SerializeField] private GameObject levelDataDisplayerGO;
     [SerializeField] private GameObject levelButtonToInstantiate;
     [Header("Level to create data")]
@@ -8,6 +11,39 @@ public class LevelPanelScript : MonoBehaviour
     public string levelSceneName;
     public float levelPointsForOneStar;
     [TextArea] public string levelDescription;
+
+    private void Awake()
+    {
+        int mostRecentUnlockedLevelIndex = 0;
+
+        levelDatas = SaveSystemScript.LoadLevelDataList();
+
+        for (int i = 0; i < levelDatas.Count; i++)
+        {
+            if (i == 0)
+            {
+                mostRecentUnlockedLevelIndex = i;
+            }
+
+            if (levelDatas[i].stars > 0)
+            {
+                mostRecentUnlockedLevelIndex = i;
+                continue;
+            }
+
+            if (i > mostRecentUnlockedLevelIndex)
+            {
+                levelDatas[i].isUnlocked = false;
+            }
+
+            if (i == mostRecentUnlockedLevelIndex + 1)
+            {
+                levelDatas[i].isUnlocked = true;
+            }
+        }
+
+        SaveSystemScript.SaveLevelDataList(levelDatas);
+    }
 
     public void CreateNewLevel()
     {

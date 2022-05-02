@@ -1,0 +1,29 @@
+fileFormatVersion: 2
+guid: d913f019c75eea2439a3a5779f508010
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Grandis Condensed
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 18214666940a2114a9579eaa34dbe49b, type: 3}
+  - {fileID: 12800000, guid: a5855b2ab5bb2344ab574cb23c68cc10, type: 3}
+  - {fileID: 12800000, guid: 28f43fb36f623f14ba9e68d1eb515485, type: 3}
+  - {fileID: 12800000, guid: a8b39ad6e4f6d8f4f855ae4eea6d90fc, type: 3}
+  - {fileID: 12800000, guid: 0477868d263cb1349ad3c9ce2a19f8de, type: 3}
+  - {fileID: 12800000, guid: b66b1af2595d3cd4aac77e8c8f3ea6fc, type: 3}
+  - {fileID: 12800000, guid: 55ca4513bbf189a4ea3fddcf7c5e8a62, type: 3}
+  - {fileID: 12800000, guid: c3831da153327e54a9fa144b23d37518, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
