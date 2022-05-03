@@ -12,13 +12,18 @@ public class LevelDataDisplayerScript : MonoBehaviour
 
     public void UpdateLevelDataDisplayText(LevelData levelData)
     {
-        Debug.Log(levelData.levelName);
         levelDataDescriptionTMP = levelDataDescriptionGO.GetComponent<TextMeshProUGUI>();
-        levelDataDescriptionTMP.text = levelData.levelDescription + "\n" + "Stars: " + levelData.stars.ToString() + "\n" + "Best points:" + levelData.bestPoints.ToString();
+        levelDataDescriptionTMP.text =
+            levelData.levelDescription +
+            "\nOne star points: "   + levelData.levelPointsForOneStar * new OneStarCondition().pointsCoefficientForStar +
+            "\nTwo star points: "   + levelData.levelPointsForOneStar * new TwoStarCondition().pointsCoefficientForStar + 
+            "\nThree star points: " + levelData.levelPointsForOneStar * new ThreeStarCondition().pointsCoefficientForStar +
+            "\nStars: "             + levelData.stars + 
+            "\nBest points:"        + levelData.bestPoints;
 
         levelDataTitleTMP = levelDataTitleGO.GetComponent<TextMeshProUGUI>();
         levelDataTitleTMP.text = levelData.levelName;
         
-        playButton.GetComponent<ButtonLoadLevelScript>().targetSceneName = levelData.levelSceneName;
+        playButton.GetComponent<ButtonLoadLevelScript>().targetSceneName = levelData.associatedSceneName;
     }
 }

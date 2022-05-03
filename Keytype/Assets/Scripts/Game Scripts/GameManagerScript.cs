@@ -14,7 +14,7 @@ public class GameManagerScript : MonoBehaviour
     public Sound bombLetterCorrectKeySound;
 
     [SerializeField] private Sound gameOverSound;
-    [SerializeField] private Sound gameEndedSound;
+    [SerializeField] private Sound gameCompleteSound;
 
     //Reference to parent of ui elements
     [SerializeField] private Transform heartUIParent;
@@ -225,14 +225,14 @@ public class GameManagerScript : MonoBehaviour
         }
         if (lives <= 0)
         {
-            UpdateStarsOfGame();
+            UpdateStars();
             if (starsOfGame <= 0) EndGame(gameOverSound, gameOverUI);
-            else if (starsOfGame > 0) EndGame(gameEndedSound, levelCompleteUI);
+            else if (starsOfGame > 0) EndGame(gameCompleteSound, levelCompleteUI);
             lives = 0;
         }
     }
 
-    private void UpdateStarsOfGame()
+    private void UpdateStars()
     {
         if (starsOfGame < starConditions.Length && starConditions[starsOfGame].CheckCondition(this)) starsOfGame = starConditions[starsOfGame].starsWhenTrue;
     }
@@ -266,7 +266,8 @@ public class GameManagerScript : MonoBehaviour
     }
     public void AddPoints()
     {
-        UpdateStarsOfGame();
+        UpdateStars();
+        if (starsOfGame >= 3) EndGame(gameCompleteSound, levelCompleteUI);
         pointsOfGame += pointsPerLetterExplode;
         pointsUI.GetComponent<TextMeshProUGUI>().text = "Points: " + pointsOfGame;
     }

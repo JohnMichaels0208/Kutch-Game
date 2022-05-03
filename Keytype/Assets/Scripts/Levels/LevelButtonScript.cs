@@ -14,7 +14,7 @@ public class LevelButtonScript : MonoBehaviour
     [TextArea] public string levelToSaveDescription;
     private void OnEnable()
     {
-        GetComponent<ButtonLoadLevelScript>().targetSceneName = associatedLevelData.levelSceneName;
+        GetComponent<ButtonLoadLevelScript>().targetSceneName = associatedLevelData.associatedSceneName;
     }
 
     private void Start()
@@ -55,7 +55,7 @@ public class LevelButtonScript : MonoBehaviour
     public void SyncDataWithLevelToSaveProperties(LevelData data)
     {
         levelToSaveName = data.levelName;
-        levelToSaveSceneName = data.levelSceneName;
+        levelToSaveSceneName = data.associatedSceneName;
         levelToSavePointsForOneStar = data.levelPointsForOneStar;
         levelToSaveDescription = data.levelDescription;
     }

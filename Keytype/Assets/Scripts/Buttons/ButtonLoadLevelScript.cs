@@ -14,6 +14,7 @@ public class ButtonLoadLevelScript : MonoBehaviour
         {
             if (CheckSceneExists(sceneToLoad))
             {
+                Debug.Log("loading scene");
                 SceneManager.LoadScene(sceneToLoad);
             }
         }

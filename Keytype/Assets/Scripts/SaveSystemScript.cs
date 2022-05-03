@@ -77,7 +77,7 @@ public static class SaveSystemScript
         List<LevelData> levelDatas = LoadLevelDataList();
         for (int i = 0; i < levelDatas.Count; i++)
         {
-            if (levelDatas[i].levelSceneName == sceneName)
+            if (levelDatas[i].associatedSceneName == sceneName)
             {
                 return i;
             }
