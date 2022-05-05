@@ -454,10 +454,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelDataDisplayerGO: {fileID: 1712665797}
   levelButtonToInstantiate: {fileID: 3641466221624842094, guid: dad86be89449c6c428bf74f081365254, type: 3}
-  levelName: Level 1
-  levelSceneName: Level 1
-  levelPointsForOneStar: 150
-  levelDescription: Basic level for beginners
+  levelName: Level 3
+  levelSceneName: Level 3
+  levelPointsForOneStar: 500
+  levelDescription: Added Timer.
 --- !u!114 &1031582639
 MonoBehaviour:
   m_ObjectHideFlags: 0

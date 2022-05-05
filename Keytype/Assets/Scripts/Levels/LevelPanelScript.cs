@@ -36,7 +36,7 @@ public class LevelPanelScript : MonoBehaviour
                 levelDatas[i].isUnlocked = false;
             }
 
-            if (i == mostRecentUnlockedLevelIndex + 1)
+            if (i == mostRecentUnlockedLevelIndex)
             {
                 levelDatas[i].isUnlocked = true;
             }

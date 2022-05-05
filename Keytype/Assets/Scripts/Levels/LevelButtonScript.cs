@@ -5,6 +5,7 @@ public class LevelButtonScript : MonoBehaviour
 {
     [SerializeField] private GameObject unlockedButton, lockedButton;
     [SerializeField] private GameObject levelNameGO;
+    [SerializeField] private GameObject[] levelStarsGO;
     [HideInInspector] public LevelData associatedLevelData;
     public GameObject levelDataDisplayer;
     [Header("Level to save data")]
@@ -66,6 +67,22 @@ public class LevelButtonScript : MonoBehaviour
         gameObject.name = data.levelName;
         //setting ui text name
         levelNameGO.GetComponent<TextMeshProUGUI>().text = data.levelName;
+        //setting ui stars
+        int starsTakenIntoCount = data.stars;
+        for (int i = 0; i < levelStarsGO.Length; i++)
+        {
+            if (starsTakenIntoCount > 0)
+            {
+                levelStarsGO[i].SetActive(true);
+                starsTakenIntoCount--;
+                continue;
+            }
+            else if (starsTakenIntoCount <= 0)
+            {
+                levelStarsGO[i].SetActive(false);
+                continue;
+            }
+        }
         //setting properties
         associatedLevelData = data;
         SyncDataWithLevelToSaveProperties(data);
