@@ -10,15 +10,14 @@ public static class SaveSystemScript
 
     public const string levelSaveFileName = "/levelsavefile.json";
 
-    public static void SaveOption(Option option)
+    public static void SaveOption(OptionData optionData)
     {
         string path = Application.persistentDataPath + optionSaveFileName;
-        OptionData optionData = new OptionData(option.soundEffectsVolume, option.gameSoundVolume, option.isFullScreen);
         string json = JsonUtility.ToJson(optionData);
         File.WriteAllText(path, json);
     }
 
-    public static OptionData LoadOption()
+    public static OptionData LoadOptionData()
     {
         string path = Application.persistentDataPath + optionSaveFileName;
         if (!File.Exists(path))
