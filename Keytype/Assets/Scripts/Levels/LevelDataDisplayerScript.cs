@@ -12,15 +12,24 @@ public class LevelDataDisplayerScript : MonoBehaviour
 
     public void UpdateLevelDataDisplayText(LevelData levelData)
     {
+        string keyCodesFormatted = "";
+        for (int i = 0; i < levelData.keyCodes.Length; i++)
+        {
+            keyCodesFormatted += levelData.keyCodes[i];
+            if (i < levelData.keyCodes.Length - 1)
+            {
+                keyCodesFormatted += ", ";
+            }
+        }
         levelDataDescriptionTMP = levelDataDescriptionGO.GetComponent<TextMeshProUGUI>();
         levelDataDescriptionTMP.text =
-            levelData.levelDescription +
-            "\nOne star points: "   + levelData.levelPointsForOneStar * new OneStarCondition().pointsCoefficientForStar +
-            "\nTwo star points: "   + levelData.levelPointsForOneStar * new TwoStarCondition().pointsCoefficientForStar + 
+            levelData.levelDescription + 
+            "\nLevel Key Codes: " + keyCodesFormatted + 
+            "\nOne star points: " + levelData.levelPointsForOneStar * new OneStarCondition().pointsCoefficientForStar +
+            "\nTwo star points: " + levelData.levelPointsForOneStar * new TwoStarCondition().pointsCoefficientForStar +
             "\nThree star points: " + levelData.levelPointsForOneStar * new ThreeStarCondition().pointsCoefficientForStar +
-            "\nStars: "             + levelData.stars + 
-            "\nBest points:"        + levelData.bestPoints;
-
+            "\nStars: " + levelData.stars +
+            "\nBest points:" + levelData.bestPoints;
         levelDataTitleTMP = levelDataTitleGO.GetComponent<TextMeshProUGUI>();
         levelDataTitleTMP.text = levelData.levelName;
         

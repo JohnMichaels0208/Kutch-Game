@@ -172,6 +172,9 @@ MonoBehaviour:
   countdownAmt: 0.4
   lives: 3
   pointsForOneStar: 100
+  oneStarCondition: {fileID: 11400000, guid: d1db8e34161a90a4ab86b3b88d41819f, type: 2}
+  twoStarCondition: {fileID: 11400000, guid: 78516342efc17a8428e787f64062eb37, type: 2}
+  threeStarCondition: {fileID: 11400000, guid: 3ccfd0d450240f24ca331b99d293d807, type: 2}
 --- !u!82 &6710793376263237841
 AudioSource:
   m_ObjectHideFlags: 0

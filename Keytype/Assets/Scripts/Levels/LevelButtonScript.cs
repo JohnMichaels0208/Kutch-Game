@@ -12,6 +12,7 @@ public class LevelButtonScript : MonoBehaviour
     public string levelToSaveName;
     public string levelToSaveSceneName;
     public float levelToSavePointsForOneStar;
+    public KeyCode[] levelToSaveKeyCodes;
     [TextArea] public string levelToSaveDescription;
     private void OnEnable()
     {
@@ -43,7 +44,7 @@ public class LevelButtonScript : MonoBehaviour
 
     public void SaveLevel()
     {
-        LevelData levelData = new LevelData(levelToSaveName, levelToSaveDescription, gameObject.name, levelToSaveSceneName, levelToSavePointsForOneStar);
+        LevelData levelData = new LevelData(levelToSaveName, levelToSaveDescription, gameObject.name, levelToSaveSceneName, levelToSavePointsForOneStar, levelToSaveKeyCodes);
         SaveSystemScript.SaveLevelData(SaveSystemScript.LoadLevelIndexByButtonName(gameObject.name), levelData);
     }
 
@@ -59,6 +60,7 @@ public class LevelButtonScript : MonoBehaviour
         levelToSaveSceneName = data.associatedSceneName;
         levelToSavePointsForOneStar = data.levelPointsForOneStar;
         levelToSaveDescription = data.levelDescription;
+        levelToSaveKeyCodes = data.keyCodes;
     }
 
     public void SyncLevelDataToButton(LevelData data)

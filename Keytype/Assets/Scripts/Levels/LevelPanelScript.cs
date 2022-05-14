@@ -10,6 +10,7 @@ public class LevelPanelScript : MonoBehaviour
     public string levelName;
     public string levelSceneName;
     public float levelPointsForOneStar;
+    public KeyCode[] keyCodes;
     [TextArea] public string levelDescription;
 
     private void Awake()
@@ -20,25 +21,24 @@ public class LevelPanelScript : MonoBehaviour
 
         for (int i = 0; i < levelDatas.Count; i++)
         {
-            if (i == 0)
+            if (i == 0 || levelDatas[i].stars > 0)
             {
+                levelDatas[i].isUnlocked = true;
                 mostRecentUnlockedLevelIndex = i;
+                continue;
             }
 
-            if (levelDatas[i].stars > 0)
+            if (i == mostRecentUnlockedLevelIndex + 1)
             {
-                mostRecentUnlockedLevelIndex = i;
+                levelDatas[i].isUnlocked = true;
                 continue;
             }
 
             if (i > mostRecentUnlockedLevelIndex)
             {
+                Debug.Log(i + " false");
                 levelDatas[i].isUnlocked = false;
-            }
-
-            if (i == mostRecentUnlockedLevelIndex)
-            {
-                levelDatas[i].isUnlocked = true;
+                continue;
             }
         }
 
@@ -49,7 +49,7 @@ public class LevelPanelScript : MonoBehaviour
     {
         GameObject instantiatedLevelButton = Instantiate(levelButtonToInstantiate, transform);
         LevelButtonScript instantiatedLevelButtonScript = instantiatedLevelButton.GetComponent<LevelButtonScript>();
-        LevelData levelData = new LevelData(levelName, levelDescription, instantiatedLevelButton.name, levelSceneName, levelPointsForOneStar);
+        LevelData levelData = new LevelData(levelName, levelDescription, instantiatedLevelButton.name, levelSceneName, levelPointsForOneStar, keyCodes);
         instantiatedLevelButtonScript.SyncLevelDataToButton(levelData);
         levelData.associatedButtonName = instantiatedLevelButton.name;
         instantiatedLevelButtonScript.levelDataDisplayer = levelDataDisplayerGO;
