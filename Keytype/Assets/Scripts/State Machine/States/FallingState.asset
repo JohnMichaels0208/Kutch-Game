@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d5fa1453f2dbf9488c0a49fa54f4bfb, type: 3}
   m_Name: FallingState
   m_EditorClassIdentifier: 
-  transitions: []
+  transitions:
+  - {fileID: 11400000, guid: ce1401669b5e93f4ba88292054aaf232, type: 2}
+  - {fileID: 11400000, guid: c24d632c331cd3b4b9fa646880ab9f03, type: 2}
   actions:
   - {fileID: 11400000, guid: b24745dff53384a4fa231c5e63fe0164, type: 2}

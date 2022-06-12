@@ -9,7 +9,7 @@ public class State : ScriptableObject
     {
         for (int i = 0; i < actions.Length; i++)
         {
-            actions[i].Execute(stateMachine);
+            actions[i].FirstExecuteCallCheck(stateMachine);
         }
         for (int i = 0; i < transitions.Length; i++)
         {

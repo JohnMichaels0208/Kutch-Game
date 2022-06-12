@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: InitFinished
   m_EditorClassIdentifier: 
   nextState: {fileID: 11400000, guid: 452da1d2c89f82940bbd322e46d4bf31, type: 2}
-  condition: {fileID: 0}
+  conditions: []
   transitionOnComplete: 1

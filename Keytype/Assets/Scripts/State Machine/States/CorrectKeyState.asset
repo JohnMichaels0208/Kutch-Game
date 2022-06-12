@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: CorrectKeyState
   m_EditorClassIdentifier: 
   transitions: []
-  actions: []
+  actions:
+  - {fileID: 11400000, guid: a4af5e6db28430942b2a1fc44a5fafe5, type: 2}
