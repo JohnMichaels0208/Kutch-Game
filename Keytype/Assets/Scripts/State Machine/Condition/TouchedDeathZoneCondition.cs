@@ -3,16 +3,17 @@ using UnityEngine;
 public class TouchedDeathZoneCondition : FSMCondition
 {
     private bool touchedDeathZone = false;
-    public override void FirstCheckConditionCall(object data)
+    public override void OnEnterState(BaseStateMachine stateMachine)
     {
-        EnableFirstCall(data);
-        base.FirstCheckConditionCall(data);
+        touchedDeathZone = false;
         FallingElementStateMachine castedStateMachine = stateMachine as FallingElementStateMachine;
         castedStateMachine.onMyTriggerEnterEvent += OnMyTriggerEnter;
     }
 
-    public override bool CheckCondition(object data)
+    public override bool CheckCondition(BaseStateMachine stateMachine)
     {
+        FallingElementStateMachine castedStateMachine = stateMachine as FallingElementStateMachine ;
+        if (touchedDeathZone) Debug.Log("trigger entered with death zone. associated key code: " + castedStateMachine.associatedKeyCode);
         return touchedDeathZone;
     }
 

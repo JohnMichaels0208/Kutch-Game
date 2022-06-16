@@ -3,11 +3,7 @@ using TMPro;
 [CreateAssetMenu(fileName = "InitAction", menuName = location + "InitAction")]
 public class InitAction : Action
 {
-    public override void Execute(BaseStateMachine stateMachine)
-    {
-    }
-
-    public override void FirstExecuteCall(BaseStateMachine stateMachine)
+    public override void OnEnterState(BaseStateMachine stateMachine)
     {
         FallingElementStateMachine castedStateMachine = stateMachine as FallingElementStateMachine;
         castedStateMachine.audioSourceComponent = castedStateMachine.GetComponent<AudioSource>();

@@ -1,4 +1,4 @@
-public abstract class StarBaseCondition : ConditionBase
+public abstract class StarBaseCondition : Condition
 {
     public abstract float pointsCoefficientForStar { get; protected set; }
     public abstract int starsWhenTrue { get; protected set; }

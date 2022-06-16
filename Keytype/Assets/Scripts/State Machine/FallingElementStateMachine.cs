@@ -28,7 +28,6 @@ public class FallingElementStateMachine : BaseStateMachine
 
     new private void Update()
     {
-        Debug.Log(currentState);
         base.Update();
     }
 

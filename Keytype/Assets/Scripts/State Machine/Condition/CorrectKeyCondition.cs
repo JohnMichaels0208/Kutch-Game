@@ -2,24 +2,35 @@ using UnityEngine;
 [CreateAssetMenu(menuName = menuLocation + "CorrectKeyCondition", fileName = "CorrectKeyCondition", order = 1)]
 public class CorrectKeyCondition : FSMCondition
 {
-    private bool isCorrectKey = false;
+    private bool isKeyDown = false;
+    private KeyCode keyCodeDetected = KeyCode.None;
 
-    public override bool CheckCondition(object data)
+    private FallingElementStateMachine castedStateMachine;
+
+    public override bool CheckCondition(BaseStateMachine stateMachine)
     {
-        EnableFirstCall(data);
-
-        return isCorrectKey;
+        if (isKeyDown)
+        {
+            castedStateMachine = (FallingElementStateMachine)stateMachine;
+            if (castedStateMachine.associatedKeyCode == keyCodeDetected)
+            {
+                isKeyDown = false;
+                keyCodeDetected = KeyCode.None;
+                return true;
+            }
+        }
+        return false;
     }
 
-    public override void FirstCheckConditionCall(object data)
+    public override void OnEnterState(BaseStateMachine stateMachine)
     {
-        base.FirstCheckConditionCall(data);
+        castedStateMachine = (FallingElementStateMachine)stateMachine;
         GameManagerScript.instance.keyDownEvent += OnKeyDown;
     }
 
     private void OnKeyDown(object sender, System.EventArgs eventArgs, KeyCode keyCode)
     {
-        FallingElementStateMachine castedStateMachine = (FallingElementStateMachine)stateMachine;
-        if (keyCode == castedStateMachine.associatedKeyCode) isCorrectKey = true;
+        keyCodeDetected = keyCode;
+        isKeyDown = true;
     }
 }

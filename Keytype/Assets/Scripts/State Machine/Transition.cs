@@ -5,11 +5,13 @@ public class Transition : ScriptableObject
 {
     public State nextState;
 
-    public ConditionBase[] conditions;
+    public FSMCondition[] conditions;
 
     public bool transitionOnComplete;
+
     public void Execute(BaseStateMachine stateMachine)
     {
+        //Checking if state actions aren't complete
         if (transitionOnComplete)
         {
             for (int i = 0; i < stateMachine.currentState.actions.Length; i++)
@@ -20,6 +22,7 @@ public class Transition : ScriptableObject
                 }
             }
         }
+        //Checking if conditions are false
         else if (!transitionOnComplete && conditions.Length != 0)
         {
             for (int i = 0; i < conditions.Length; i++)
@@ -30,6 +33,9 @@ public class Transition : ScriptableObject
                 }
             }
         }
-        stateMachine.currentState = nextState;
+        FallingElementStateMachine fsm = (FallingElementStateMachine)stateMachine;
+
+        Debug.Log("transition switching to" + nextState + " associated key code: " + fsm.associatedKeyCode);
+        stateMachine.SwitchState(nextState);
     }
 }

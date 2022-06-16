@@ -1,13 +1,11 @@
 using UnityEngine;
-       
-public abstract class FSMCondition : ConditionBase
+public abstract class FSMCondition : ScriptableObject
 {
     protected const string menuLocation = "FSM/Condition/";
 
-    protected BaseStateMachine stateMachine;
-
-    public override void FirstCheckConditionCall(object data)
+    public virtual void OnEnterState(BaseStateMachine stateMachine)
     {
-        stateMachine = (BaseStateMachine)data;
     }
+
+    public abstract bool CheckCondition(BaseStateMachine stateMachine);
 }
